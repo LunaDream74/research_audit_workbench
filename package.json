@@ -1,0 +1,15 @@
+{
+  "name": "webmcp-research-auditor",
+  "private": true,
+  "workspaces": ["apps/web", "packages/contracts"],
+  "scripts": {
+    "dev": "npm --workspace @webmcp/web run dev",
+    "build": "npm --workspace @webmcp/web run build",
+    "lint": "npm --workspace @webmcp/web run lint",
+    "typecheck": "npm --workspace @webmcp/web run typecheck",
+    "test": "npm --workspace @webmcp/web run test",
+    "test:e2e": "npm --workspace @webmcp/web run test:e2e",
+    "contracts:generate": "apps\\api\\.venv\\Scripts\\python.exe apps/api/scripts/export_openapi.py && openapi-typescript packages/contracts/openapi.json -o packages/contracts/src/generated.ts",
+    "contracts:check": "npm run contracts:generate && git diff --exit-code -- packages/contracts"
+  }
+}

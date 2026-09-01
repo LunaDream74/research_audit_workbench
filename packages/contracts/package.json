@@ -1,0 +1,9 @@
+{
+  "name": "@webmcp/contracts",
+  "private": true,
+  "type": "module",
+  "exports": "./src/generated.ts",
+  "devDependencies": {
+    "openapi-typescript": "^7.13.0"
+  }
+}

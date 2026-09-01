@@ -1,0 +1,6 @@
+{
+  "schema_version": "1.0",
+  "experiment": "Rain retrieval comparison",
+  "runs": ["run-a", "run-b"]
+}
+

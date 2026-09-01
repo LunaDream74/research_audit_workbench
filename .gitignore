@@ -1,0 +1,16 @@
+node_modules/
+.next/
+coverage/
+playwright-report/
+test-results/
+.venv/
+.uv-cache/
+.tools/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.env
+.env.local
+!.env.example
+.vercel/
+

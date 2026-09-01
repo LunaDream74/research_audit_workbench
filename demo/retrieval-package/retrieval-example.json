@@ -1,0 +1,6 @@
+{
+  "query": "A pedestrian crossing a road in the rain",
+  "run_a_missing_distractors": ["rainy intersection at dusk", "pedestrian under umbrella"],
+  "note": "This illustrates different candidate availability; it does not quantify the score gap."
+}
+

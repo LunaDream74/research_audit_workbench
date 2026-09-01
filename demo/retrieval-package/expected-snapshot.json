@@ -1,0 +1,29 @@
+{
+  "selection_digest": "demo-run-a-run-b-v1",
+  "question": "Does this apparent improvement justify another training run?",
+  "run_a": {
+    "id": "run-a",
+    "name": "Run A",
+    "metric_name": "Recall@5",
+    "metric_value": 0.84,
+    "declared_candidate_count": 200,
+    "recorded_candidate_count": 200,
+    "evaluation_split": "test-v1",
+    "preprocessing": "clip-standard-v1",
+    "metric_definition": "correct target in top 5",
+    "source_hashes": {"candidate_manifest": "sha256:run-a-manifest", "config": "sha256:run-a-config"}
+  },
+  "run_b": {
+    "id": "run-b",
+    "name": "Run B",
+    "metric_name": "Recall@5",
+    "metric_value": 0.76,
+    "declared_candidate_count": 1000,
+    "recorded_candidate_count": 1000,
+    "evaluation_split": "test-v1",
+    "preprocessing": "clip-standard-v1",
+    "metric_definition": "correct target in top 5",
+    "source_hashes": {"candidate_manifest": "sha256:run-b-manifest", "config": "sha256:run-b-config"}
+  }
+}
+
