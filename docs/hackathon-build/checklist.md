@@ -43,13 +43,13 @@
   Acceptance: A supported browser agent reads the current pair and starts the deterministic audit; changing the pair invalidates old registration/results; unsupported browsers retain the manual demo path; tools cannot write durable state.
   Verify: Run mocked `modelContext` Vitest tests and manually invoke both tools in the target WebMCP browser before proceeding.
 
-- [ ] **6. Add inspectable evidence and complete the five-tool surface**
+- [x] **6. Add inspectable evidence and complete the five-tool surface**
   Spec ref: `spec.md > Components And Responsibilities > Finding and Evidence Presentation`
   What to build: Add the side-by-side evidence drawer with source level, path, hash, surrounding context, and highlighted values. Register `show_finding_evidence`, `stage_challenge_revision`, and `stage_resolution_plan` as reversible UI previews.
   Acceptance: The judge can verify 200 and 1,000 from their source records; agent prose is visually separate from facts; missing evidence is explicit; none of the five tools exposes a durable-write or approval action.
   Verify: Run evidence/tool unit tests, inspect the registered tool list, and manually trace every displayed claim to fixture evidence.
 
-- [ ] **7. Complete the in-memory challenge-to-approval wow loop**
+- [x] **7. Complete the in-memory challenge-to-approval wow loop**
   Spec ref: `spec.md > Data Flow > Audit-to-Approval Lifecycle`
   What to build: Implement challenge preview/diff, retained-limitation display, editable versioned plan, deterministic plan validation, specific limitation acknowledgment, exact digest display, and demo approval history in memory.
   Acceptance: `intentional sanity check` revises interpretation without erasing incompatibility; a batch-size edit stays valid; a one-sided candidate-pool edit warns; approval binds only the exact version and cannot imply autonomous execution.

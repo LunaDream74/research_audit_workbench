@@ -298,3 +298,15 @@
 - Chrome discovered exactly `get_current_comparison` and `run_comparability_audit`, and native `executeTool` returned the live Run A/Run B selection, question, scores, candidate counts, hashes, and selection digest.
 - Chrome 151's in-page testing API expects JSON-string invocation arguments; the page tool callback still receives parsed structured arguments as specified.
 - Typecheck, ESLint, 5 Vitest tests, and the Next.js production build passed.
+
+## 2026-09-01 - Checklist items 6-7 completed
+
+- Item 6: added side-by-side manifest evidence with source levels, paths, hashes, surrounding retrieval context, and an explicit no-causality limitation.
+- Completed the five-tool WebMCP surface with `show_finding_evidence`, `stage_challenge_revision`, and `stage_resolution_plan`; all three change only visible temporary state.
+- Item 7: added the human-only first-finding save, challenge preview/diff, retained factual limitation, second confirmation, editable matched reevaluation, operational-vs-decision warning classes, SHA-256 plan digest, exact approval, and immutable demo history.
+- Visual self-review found that approved controls initially remained editable; corrected this by locking all plan fields and replacing the approval action with a disabled `Exact version approved` state.
+- Native headed Chrome invoked all five tools in order. Challenge staging was available only after the human saved the finding; plan staging was available only after the human confirmed the revised interpretation.
+- Verification passed: TypeScript, ESLint, 9 Vitest tests, Next.js production build, and the Playwright full wow-path test including post-approval immutability.
+- Captured and visually reviewed `test-results/wow-checkpoint.png`; it clearly carries the full unsupported-decision-to-defensible-action story in one scroll.
+- Items 6 and 7 share one commit because the evidence tools and human approval controls are one integrated vertical interaction; item 5 retains its separate native WebMCP commit.
+- Required participant inspection pause reached after item 7.

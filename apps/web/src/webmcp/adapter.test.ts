@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { registerWebMCPTools } from "./adapter";
-import { buildCoreDemoTools } from "./demo-tools";
+import { buildCoreDemoTools, buildDemoTools } from "./demo-tools";
 import type { ModelContext, WebMCPTool } from "./types";
 
 function toolContext() {
@@ -48,5 +48,21 @@ describe("WebMCP adapter", () => {
     const result = await tools[1].execute({ selectionDigest: "old-pair" });
     expect(result.structuredContent.error).toBe("stale_selection");
   });
-});
 
+  it("exposes five tools while keeping every agent action reversible", () => {
+    const tools = buildDemoTools({
+      ...toolContext(),
+      showEvidence: vi.fn(() => ({ schemaVersion: "1.0", opened: true })),
+      stageChallenge: vi.fn(() => ({ schemaVersion: "1.0", preview: true })),
+      stagePlan: vi.fn(() => ({ schemaVersion: "1.0", preview: true })),
+    });
+    expect(tools.map((tool) => tool.name)).toEqual([
+      "get_current_comparison",
+      "run_comparability_audit",
+      "show_finding_evidence",
+      "stage_challenge_revision",
+      "stage_resolution_plan",
+    ]);
+    expect(tools.map((tool) => tool.name).join(" ")).not.toMatch(/approve|confirm|save|delete|execute_experiment/);
+  });
+});

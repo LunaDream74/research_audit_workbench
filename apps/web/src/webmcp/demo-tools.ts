@@ -1,4 +1,5 @@
 import type { DemoRun } from "@/src/demo/fixture";
+import type { ChallengePreview, ResolutionPlan } from "@/src/domain/investigation";
 import { toolResult } from "./adapter";
 import type { WebMCPTool } from "./types";
 
@@ -11,6 +12,9 @@ export type DemoToolContext = {
     evidenceAvailability: string;
   };
   runAudit: (selectionDigest: string, question?: string) => Record<string, unknown>;
+  showEvidence?: (findingId: string, evidenceRefIds?: string[]) => Record<string, unknown>;
+  stageChallenge?: (findingId: string, researcherContext: string) => ChallengePreview | Record<string, unknown>;
+  stagePlan?: (investigationId: string, constraints?: Record<string, unknown>) => ResolutionPlan | Record<string, unknown>;
 };
 
 export function buildCoreDemoTools(context: DemoToolContext): WebMCPTool[] {
@@ -57,3 +61,70 @@ export function buildCoreDemoTools(context: DemoToolContext): WebMCPTool[] {
   ];
 }
 
+export function buildDemoTools(context: DemoToolContext): WebMCPTool[] {
+  return [
+    ...buildCoreDemoTools(context),
+    {
+      name: "show_finding_evidence",
+      title: "Show evidence for a comparability finding",
+      description: "Open the page's side-by-side source evidence for a temporary or saved finding. This changes only the visible panel.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          findingId: { type: "string" },
+          evidenceRefIds: { type: "array", items: { type: "string" } },
+        },
+        required: ["findingId"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: true },
+      execute: (args) => toolResult(
+        context.showEvidence?.(
+          String(args.findingId ?? ""),
+          Array.isArray(args.evidenceRefIds) ? args.evidenceRefIds.map(String) : undefined,
+        ) ?? { schemaVersion: "1.0", error: "evidence_unavailable" },
+      ),
+    },
+    {
+      name: "stage_challenge_revision",
+      title: "Preview a revised finding interpretation",
+      description: "Stage a reversible interpretation preview using researcher-provided context. A human must confirm before anything enters the investigation history.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          findingId: { type: "string" },
+          researcherContext: { type: "string", minLength: 1 },
+        },
+        required: ["findingId", "researcherContext"],
+        additionalProperties: false,
+      },
+      execute: (args) => toolResult({
+        schemaVersion: "1.0",
+        temporary: true,
+        ...(context.stageChallenge?.(String(args.findingId ?? ""), String(args.researcherContext ?? "")) ?? { error: "challenge_unavailable" }),
+      }),
+    },
+    {
+      name: "stage_resolution_plan",
+      title: "Draft a controlled reevaluation plan",
+      description: "Stage an editable reevaluation plan. This does not save or approve the plan and grants no permission to execute experiments.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          investigationId: { type: "string" },
+          constraints: { type: "object" },
+        },
+        required: ["investigationId"],
+        additionalProperties: false,
+      },
+      execute: (args) => toolResult({
+        schemaVersion: "1.0",
+        temporary: true,
+        ...(context.stagePlan?.(
+          String(args.investigationId ?? ""),
+          typeof args.constraints === "object" && args.constraints ? args.constraints as Record<string, unknown> : undefined,
+        ) ?? { error: "plan_unavailable" }),
+      }),
+    },
+  ];
+}
