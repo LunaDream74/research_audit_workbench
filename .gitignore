@@ -9,8 +9,8 @@ test-results/
 __pycache__/
 .pytest_cache/
 *.py[cod]
+*.tsbuildinfo
 .env
 .env.local
 !.env.example
 .vercel/
-
