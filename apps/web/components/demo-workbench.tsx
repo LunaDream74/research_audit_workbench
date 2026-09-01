@@ -211,7 +211,7 @@ export function DemoWorkbench() {
       <section className="audit-panel">
         <div className="audit-header">
           <div><p className="eyebrow">Neutral audit</p><h2>Comparability, before ranking</h2></div>
-          <button disabled={!pairReady} onClick={() => revealAudit()} type="button">Run prepared audit</button>
+          <button disabled={!pairReady || webMCPStatus === "checking"} onClick={() => revealAudit()} type="button">Run prepared audit</button>
         </div>
 
         {auditState === "idle" ? (

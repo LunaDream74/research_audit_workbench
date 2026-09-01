@@ -55,7 +55,7 @@
   Acceptance: `intentional sanity check` revises interpretation without erasing incompatibility; a batch-size edit stays valid; a one-sided candidate-pool edit warns; approval binds only the exact version and cannot imply autonomous execution.
   Verify: Run domain/Vitest tests and the Playwright wow-path through exact approval, then pause for participant inspection of the central demo moment.
 
-- [ ] **8. Add Supabase auth, schema, RLS, and storage boundaries**
+- [x] **8. Add Supabase auth, schema, RLS, and storage boundaries**
   Spec ref: `spec.md > Architecture > Supabase Auth, Database, and Storage`
   What to build: Add email/password SSR auth, migrations for the nine compact tables, constraints/indexes, RLS policies, small-artifact storage policies, and local seed data. Keep service credentials server-only.
   Acceptance: Private routes require auth; users cannot read or mutate another owner's rows/artifacts; investigations require two distinct owned runs; approved plans cannot be edited in place; demo remains independent.

@@ -310,3 +310,12 @@
 - Captured and visually reviewed `test-results/wow-checkpoint.png`; it clearly carries the full unsupported-decision-to-defensible-action story in one scroll.
 - Items 6 and 7 share one commit because the evidence tools and human approval controls are one integrated vertical interaction; item 5 retains its separate native WebMCP commit.
 - Required participant inspection pause reached after item 7.
+
+## 2026-09-01 - Checklist item 8 completed
+
+- Added cookie-backed Supabase SSR email/password authentication, anonymous workspace redirects, and a private investigation landing page while keeping `/demo` independent of Supabase.
+- Added the nine-table PostgreSQL schema with ownership-preserving composite foreign keys, distinct-run investigations, version/revision uniqueness, list indexes, append-only event support, and immutable approved plan versions.
+- Enabled owner-scoped RLS for every private table and a private `research-evidence` storage bucket with owner-folder, MIME, and 2 MB object limits; no service-role credential is exposed to the web client or analysis API.
+- Local Supabase migration and seed application passed. Nine pgTAP checks passed against the live database, covering forged ownership, cross-user reads, distinct runs, and approved-plan update/delete rejection.
+- Added a browser auth journey proving anonymous redirect and local account access. The first parallel run exposed a hydration race in the existing demo test; after participant confirmation, the audit control now waits for WebMCP initialization and both Playwright journeys pass in parallel.
+- Full verification passed: TypeScript, ESLint, 9 Vitest tests, 8 Pytest tests, Ruff, Next.js production build, 2 Playwright journeys, and 9 database tests.
