@@ -282,3 +282,19 @@
 - Visual inspection confirmed the dark technical page makes the decision question, pair, scores, candidate counts, agent scope, and no-persistence boundary legible at desktop width.
 - The repository was initialized only after the first four items reached a green state, so these items share the first batch revert-point commit; subsequent items return to one green commit per vertical slice.
 - Required participant inspection pause reached after item 4.
+
+## 2026-09-01 - Item 5 verification pause
+
+- Implemented the standards-facing `document.modelContext` adapter, AbortSignal lifecycle, schema-versioned tool results, live selection digest, `get_current_comparison`, and `run_comparability_audit`.
+- Added mocked native registration, unsupported-browser fallback, abort, and stale-selection tests; 5 frontend unit tests pass and the production build/typecheck pass.
+- Installed Chrome 151 does not expose `document.modelContext` in headless mode. Current official implementation notes confirm Chrome 150+ requires the WebMCP testing/experimental flag and that headless Chrome 149-151 may expose only a testing surface. Live invocation remains a headed-browser verification.
+- Verification stopped because React lint rejects a synchronous WebMCP-status state update inside the registration effect. The proposed correction is to update status from the registration promise callback so the effect only synchronizes the external registry.
+- Item 5 remains unchecked and uncommitted pending the lint correction and live flagged-browser check.
+
+## 2026-09-01 - Checklist item 5 completed
+
+- Moved WebMCP status updates into the asynchronous registration callback; React lint now passes.
+- Native verification passed in headed Chrome 151 with `--enable-experimental-web-platform-features`.
+- Chrome discovered exactly `get_current_comparison` and `run_comparability_audit`, and native `executeTool` returned the live Run A/Run B selection, question, scores, candidate counts, hashes, and selection digest.
+- Chrome 151's in-page testing API expects JSON-string invocation arguments; the page tool callback still receives parsed structured arguments as specified.
+- Typecheck, ESLint, 5 Vitest tests, and the Next.js production build passed.

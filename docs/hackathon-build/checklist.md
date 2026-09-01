@@ -37,7 +37,7 @@
   Acceptance: A judge can identify the apparent winner, selected pair, question, and agent scope without explanation; no demo action creates Supabase data; the highest score is not labeled `best`.
   Verify: Run Vitest UI checks and a Playwright disposable-state test, then pause for participant inspection of the first visual checkpoint.
 
-- [ ] **5. Prove the WebMCP adapter with live selection and audit tools**
+- [x] **5. Prove the WebMCP adapter with live selection and audit tools**
   Spec ref: `spec.md > WebMCP Tool Contracts`
   What to build: Implement the feature-detected adapter, schema validation, versioned tool results, abort-based unregister behavior, `get_current_comparison`, and `run_comparability_audit`; connect audit progress/results to the page.
   Acceptance: A supported browser agent reads the current pair and starts the deterministic audit; changing the pair invalidates old registration/results; unsupported browsers retain the manual demo path; tools cannot write durable state.

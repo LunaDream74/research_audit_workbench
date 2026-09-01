@@ -1,15 +1,57 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { demoQuestion, demoRuns, recordedScore, selectedPairLabel } from "@/src/demo/fixture";
+import { registerWebMCPTools } from "@/src/webmcp/adapter";
+import { buildCoreDemoTools } from "@/src/webmcp/demo-tools";
 
 type AuditState = "idle" | "complete";
 
 export function DemoWorkbench() {
   const [selected, setSelected] = useState<string[]>(["run-a", "run-b"]);
   const [auditState, setAuditState] = useState<AuditState>("idle");
+  const [webMCPStatus, setWebMCPStatus] = useState<"checking" | "native" | "fallback">("checking");
   const pairLabel = useMemo(() => selectedPairLabel(selected), [selected]);
   const pairReady = selected.length === 2;
+  const selectionDigest = `demo-${selected.join("-")}-v1`;
+
+  useEffect(() => {
+    let active = true;
+    const registration = registerWebMCPTools(
+      buildCoreDemoTools({
+        getComparison: () => ({
+          schemaVersion: "1.0",
+          selectionDigest,
+          question: demoQuestion,
+          runs: demoRuns.filter((run) => selected.includes(run.id)),
+          evidenceAvailability: "Recorded candidate manifests and declared evaluation configurations",
+        }),
+        runAudit: (requestedDigest) => {
+          setAuditState("complete");
+          return {
+            schemaVersion: "1.0",
+            selectionDigest: requestedDigest,
+            findingId: "candidate-pool-mismatch",
+            temporary: true,
+            conclusion: "Direct model ranking is not established under mismatched candidate pools.",
+            evidenceRefIds: ["run-a:manifest:candidate-count", "run-b:manifest:candidate-count"],
+          };
+        },
+      }),
+    );
+    registration.ready.then(
+      () => {
+        if (active) setWebMCPStatus(registration.supported ? "native" : "fallback");
+      },
+      () => {
+        if (active) setWebMCPStatus("fallback");
+      },
+    );
+    return () => {
+      active = false;
+      registration.abort();
+    };
+  }, [selected, selectionDigest]);
 
   function toggleRun(runId: string) {
     setAuditState("idle");
@@ -25,7 +67,12 @@ export function DemoWorkbench() {
           <p className="product-mark"><span aria-hidden="true">◇</span> Research Audit Workbench</p>
           <p className="workspace-label">Rain retrieval / decision workspace</p>
         </div>
-        <div className="demo-badge"><span /> Demo data · nothing is saved</div>
+        <div className="header-badges">
+          <div className={`mcp-badge ${webMCPStatus}`}>
+            {webMCPStatus === "native" ? "WebMCP · 2 tools live" : "WebMCP · manual fallback"}
+          </div>
+          <div className="demo-badge"><span /> Demo data · nothing is saved</div>
+        </div>
       </header>
 
       <section className="hero-panel">
@@ -120,4 +167,3 @@ export function DemoWorkbench() {
     </main>
   );
 }
-
