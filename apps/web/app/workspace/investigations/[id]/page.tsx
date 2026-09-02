@@ -7,8 +7,8 @@ export const dynamic = "force-dynamic";
 export default async function InvestigationPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = await createClient();
-  const { data: claims } = await supabase.auth.getClaims();
-  if (!claims?.claims) redirect("/login");
+  const { data } = await supabase.auth.getUser();
+  if (!data.user) redirect("/login");
   const { data: investigation } = await supabase.from("investigations")
     .select("id, question, status, run_a_id, run_b_id, updated_at").eq("id", id).single();
   if (!investigation) notFound();

@@ -4,8 +4,8 @@ import { createClient } from "@/src/server/supabase/server";
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = await createClient();
-  const { data: claims } = await supabase.auth.getClaims();
-  if (!claims?.claims) return NextResponse.json({ error: "authentication_required" }, { status: 401 });
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return NextResponse.json({ error: "authentication_required" }, { status: 401 });
   const body = await request.json().catch(() => null);
   if (!body || !Number.isInteger(body.expectedRevision) || typeof body.challengePreview !== "object") {
     return NextResponse.json({ error: "invalid_challenge_confirmation" }, { status: 400 });

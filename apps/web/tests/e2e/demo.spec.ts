@@ -34,3 +34,15 @@ test("the prepared walkthrough is evidence-first and disposable", async ({ page 
   await expect(page.getByText("no execution permission granted", { exact: false })).toBeVisible();
   expect(privateRequests).toEqual([]);
 });
+
+test("the public demo keeps keyboard focus visible on a narrow screen", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/demo");
+
+  const auditButton = page.getByRole("button", { name: "Run prepared audit" });
+  await auditButton.focus();
+  await expect(auditButton).toBeFocused();
+  await expect(auditButton).toHaveCSS("outline-style", "solid");
+  await expect(page.locator("main")).not.toHaveCSS("overflow-x", "scroll");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+});

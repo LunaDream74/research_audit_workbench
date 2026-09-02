@@ -30,14 +30,20 @@ export function PersistentInvestigation({ runs }: { runs: RunRecord[] }) {
   async function call(path: string, body: unknown) {
     setBusy(true);
     setError("");
-    const response = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    const result = await response.json();
-    setBusy(false);
-    if (!response.ok) {
-      setError(result.detail ?? result.error ?? "Request failed");
+    try {
+      const response = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const result = await response.json();
+      if (!response.ok) {
+        setError(result.detail ?? result.error ?? "Request failed");
+        return null;
+      }
+      return result;
+    } catch {
+      setError("The request could not be completed. Your current record is unchanged.");
       return null;
+    } finally {
+      setBusy(false);
     }
-    return result;
   }
 
   async function saveFinding() {
@@ -80,7 +86,7 @@ export function PersistentInvestigation({ runs }: { runs: RunRecord[] }) {
   }
 
   return (
-    <div className="persistent-flow">
+    <div className="persistent-flow" aria-busy={busy}>
       <div className="workspace-heading"><div><p className="eyebrow">Persistent control room</p><h1>Turn evidence into a durable decision</h1></div><span className="step-chip">Human confirmation only</span></div>
       <section className="comparison-panel">
         <h2>{question}</h2>

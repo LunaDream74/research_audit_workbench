@@ -6,8 +6,8 @@ export const dynamic = "force-dynamic";
 
 export default async function WorkspacePage() {
   const supabase = await createClient();
-  const { data: claims } = await supabase.auth.getClaims();
-  if (!claims?.claims) redirect("/login");
+  const { data } = await supabase.auth.getUser();
+  if (!data.user) redirect("/login");
   const { data: investigations } = await supabase
     .from("investigations")
     .select("id, question, status, updated_at")

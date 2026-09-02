@@ -6,8 +6,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   const { id, version: rawVersion } = await params;
   const version = Number(rawVersion);
   const supabase = await createClient();
-  const { data: claims } = await supabase.auth.getClaims();
-  if (!claims?.claims) return NextResponse.json({ error: "authentication_required" }, { status: 401 });
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return NextResponse.json({ error: "authentication_required" }, { status: 401 });
   const body = await request.json().catch(() => null);
   if (!body || typeof body.digest !== "string" || typeof body.rationale !== "string" || !Number.isInteger(version)) {
     return NextResponse.json({ error: "invalid_approval" }, { status: 400 });

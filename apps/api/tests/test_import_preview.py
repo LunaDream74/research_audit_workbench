@@ -8,6 +8,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app import app
+from src.auth.bearer import require_bearer
 from src.importers import ImportPackageError, preview_prepared_package
 
 FIXTURE_ROOT = Path(__file__).parents[3] / "demo" / "retrieval-package"
@@ -47,12 +48,16 @@ def test_preview_endpoint_requires_a_bearer_and_returns_the_graph() -> None:
         files={"package": ("prepared.zip", package, "application/zip")},
         data={"schema_version": "1.0"},
     )
-    response = client.post(
-        "/v1/imports/preview",
-        headers={"Authorization": "Bearer test-token"},
-        files={"package": ("prepared.zip", package, "application/zip")},
-        data={"schema_version": "1.0"},
-    )
+    app.dependency_overrides[require_bearer] = lambda: "test-token"
+    try:
+        response = client.post(
+            "/v1/imports/preview",
+            headers={"Authorization": "Bearer test-token"},
+            files={"package": ("prepared.zip", package, "application/zip")},
+            data={"schema_version": "1.0"},
+        )
+    finally:
+        app.dependency_overrides.pop(require_bearer, None)
 
     assert denied.status_code == 401
     assert response.status_code == 200

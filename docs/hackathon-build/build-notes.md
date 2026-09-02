@@ -338,3 +338,12 @@
 - Automated verification passed: 17 Pytest tests, Ruff, TypeScript, ESLint, 9 Vitest tests, Next.js production build, 26 pgTAP assertions, and all 4 Playwright journeys. The persistent journey covers import, finding save, challenge, plan edit, exact approval, reload, and resume.
 - Captured `test-results/persistent-checkpoint.png` for the required participant inspection. Item 10 remains open until that inspection passes.
 - Anh Minh approved the persistent-MVP visual checkpoint with “everything look good.” Item 10 is complete; item 11 is the next build slice.
+
+## 2026-09-02 - Checklist item 11 completed
+
+- Hardened FastAPI bearer authentication by validating access tokens against hosted Supabase Auth; missing configuration and unavailable auth fail closed. Added exact CORS origin handling and coverage for allowed and denied origins.
+- Added visible keyboard focus, reduced-motion handling, narrow-screen layouts, accessible error/live states, and network-failure-safe busy controls. The deployment-aware Playwright configuration now runs the same suite against localhost or a public origin.
+- Replaced signing-mode-sensitive local claim checks with authoritative Supabase `getUser()` validation at every private page and human-only Route Handler boundary.
+- Deployed separate production projects at `https://webmcp-research-auditor.vercel.app` and `https://webmcp-research-auditor-api.vercel.app`, backed by a clean Singapore Supabase project with four tracked migrations and exact authentication redirect settings.
+- Public verification passed: web/API health, anonymous API rejection, exact CORS allowlist, authenticated candidate-pool audit, prepared import, persistence, challenge, exact approval, reload/resume, disposable demo, mobile layout, and keyboard focus. All five public browser journeys passed in 34.4 seconds.
+- Full local verification passed: 22 Pytest tests, Ruff, TypeScript, ESLint, 9 Vitest tests, production build, 26 pgTAP assertions, and generated OpenAPI/TypeScript contract drift check. P1 remained untouched until this deployed P0 gate passed.

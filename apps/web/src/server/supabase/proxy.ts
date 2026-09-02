@@ -15,12 +15,11 @@ export async function updateSession(request: NextRequest) {
       },
     },
   });
-  const { data } = await supabase.auth.getClaims();
-  if (!data?.claims && request.nextUrl.pathname.startsWith("/workspace")) {
+  const { data } = await supabase.auth.getUser();
+  if (!data.user && request.nextUrl.pathname.startsWith("/workspace")) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
   return response;
 }
-

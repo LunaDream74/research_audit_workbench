@@ -31,33 +31,43 @@ export function ImportReview() {
     setBusy(true);
     setError("");
     setPreview(null);
-    const body = new FormData();
-    body.set("package", file);
-    body.set("schema_version", "1.0");
-    const response = await fetch("/api/imports/preview", { method: "POST", body });
-    const result = await response.json();
-    if (!response.ok) setError(result.detail ?? result.error ?? "Preview failed");
-    else setPreview(result);
-    setBusy(false);
+    try {
+      const body = new FormData();
+      body.set("package", file);
+      body.set("schema_version", "1.0");
+      const response = await fetch("/api/imports/preview", { method: "POST", body });
+      const result = await response.json();
+      if (!response.ok) setError(result.detail ?? result.error ?? "Preview failed");
+      else setPreview(result);
+    } catch {
+      setError("The package could not be checked. Please try again.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function confirmImport() {
     if (!file || !preview) return;
     setBusy(true);
     setError("");
-    const body = new FormData();
-    body.set("package", file);
-    body.set("digest", preview.digest);
-    const response = await fetch("/api/imports/confirm", { method: "POST", body });
-    const result = await response.json();
-    if (!response.ok) setError(result.detail ?? result.error ?? "Confirmation failed");
-    else setConfirmed(true);
-    setBusy(false);
+    try {
+      const body = new FormData();
+      body.set("package", file);
+      body.set("digest", preview.digest);
+      const response = await fetch("/api/imports/confirm", { method: "POST", body });
+      const result = await response.json();
+      if (!response.ok) setError(result.detail ?? result.error ?? "Confirmation failed");
+      else setConfirmed(true);
+    } catch {
+      setError("The import could not be confirmed. No records were saved.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   if (confirmed) {
     return (
-      <section className="import-success">
+      <section className="import-success" aria-live="polite">
         <p className="eyebrow">Import confirmed</p>
         <h2>Two runs are now durable</h2>
         <p>The reviewed snapshot, file hashes, and provenance survived as your private records.</p>
@@ -68,7 +78,7 @@ export function ImportReview() {
 
   return (
     <div className="import-layout">
-      <section className="import-upload">
+      <section className="import-upload" aria-busy={busy}>
         <p className="eyebrow">Prepared package</p>
         <h1>Review before anything is saved</h1>
         <p>ZIP only, 10 MB maximum. Checkpoints, nested archives, links, and unsafe paths are rejected.</p>
@@ -88,7 +98,7 @@ export function ImportReview() {
       </section>
 
       {preview && (
-        <section className="import-review" aria-label="Import review">
+        <section className="import-review" aria-busy={busy} aria-label="Import review">
           <div className="review-heading">
             <div><p className="eyebrow">Ready for human confirmation</p><h2>{preview.proposed_experiment.name}</h2></div>
             <span>{preview.audit_readiness.status}</span>

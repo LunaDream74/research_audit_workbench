@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 
 from app import app
 from src.audits import audit_comparability
+from src.auth.bearer import require_bearer
 from src.schemas import ComparabilityRequest, RunSnapshot
 
 
@@ -64,11 +65,14 @@ def test_endpoint_requires_bearer() -> None:
 
 def test_endpoint_returns_audit() -> None:
     client = TestClient(app)
-    response = client.post(
-        "/v1/audits/comparability",
-        headers={"Authorization": "Bearer local-test-token"},
-        json=request(run("a", 0.84, 200), run("b", 0.76, 1000)).model_dump(),
-    )
+    app.dependency_overrides[require_bearer] = lambda: "local-test-token"
+    try:
+        response = client.post(
+            "/v1/audits/comparability",
+            headers={"Authorization": "Bearer local-test-token"},
+            json=request(run("a", 0.84, 200), run("b", 0.76, 1000)).model_dump(),
+        )
+    finally:
+        app.dependency_overrides.pop(require_bearer, None)
     assert response.status_code == 200
     assert response.json()["findings"][0]["id"] == "candidate-pool-mismatch"
-

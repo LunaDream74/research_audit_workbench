@@ -73,7 +73,7 @@
   Acceptance: Temporary audits create no durable finding; stale/cross-owner digests fail; approval stores exact version, digest, actor, time, rationale, and limitation; editing approved content creates `n+1`; reload restores the understandable decision without restarting agent work.
   Verify: Run handler/domain/database tests and Playwright save-reload-approve history checks, then pause for participant inspection of the persistent MVP.
 
-- [ ] **11. Harden, deploy, and prove the P0 hero path**
+- [x] **11. Harden, deploy, and prove the P0 hero path**
   Spec ref: `spec.md > Risks And Verification`
   What to build: Close accessibility/responsive/error-state gaps, configure explicit CORS and preview/production environment variables, deploy separate web/API Vercel projects, and run the complete hero test and smoke checks against the public origins.
   Acceptance: The deployed URL completes selection -> WebMCP audit -> evidence -> challenge -> validated exact approval; import and resume work when authenticated; demo creates no durable rows; all P0 checks pass and P1 remains untouched.

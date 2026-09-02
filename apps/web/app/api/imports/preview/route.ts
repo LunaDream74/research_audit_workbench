@@ -6,9 +6,9 @@ export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   const supabase = await createClient();
-  const { data: claims } = await supabase.auth.getClaims();
+  const { data: userData } = await supabase.auth.getUser();
   const { data: session } = await supabase.auth.getSession();
-  if (!claims?.claims || !session.session?.access_token) {
+  if (!userData.user || !session.session?.access_token) {
     return NextResponse.json({ error: "authentication_required" }, { status: 401 });
   }
   const incoming = await request.formData();

@@ -3,8 +3,8 @@ import { createClient } from "@/src/server/supabase/server";
 
 export async function POST(request: Request) {
   const supabase = await createClient();
-  const { data: claims } = await supabase.auth.getClaims();
-  if (!claims?.claims) return NextResponse.json({ error: "authentication_required" }, { status: 401 });
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return NextResponse.json({ error: "authentication_required" }, { status: 401 });
 
   const body = await request.json().catch(() => null);
   if (!body || typeof body.runAId !== "string" || typeof body.runBId !== "string"
