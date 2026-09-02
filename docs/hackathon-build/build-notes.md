@@ -347,3 +347,12 @@
 - Deployed separate production projects at `https://webmcp-research-auditor.vercel.app` and `https://webmcp-research-auditor-api.vercel.app`, backed by a clean Singapore Supabase project with four tracked migrations and exact authentication redirect settings.
 - Public verification passed: web/API health, anonymous API rejection, exact CORS allowlist, authenticated candidate-pool audit, prepared import, persistence, challenge, exact approval, reload/resume, disposable demo, mobile layout, and keyboard focus. All five public browser journeys passed in 34.4 seconds.
 - Full local verification passed: 22 Pytest tests, Ruff, TypeScript, ESLint, 9 Vitest tests, production build, 26 pgTAP assertions, and generated OpenAPI/TypeScript contract drift check. P1 remained untouched until this deployed P0 gate passed.
+
+## 2026-09-02 - Devpost handoff drafting started
+
+- Confirmed through Devpost that submissions are open and the account is registered for The WebMCP Challenge. The deadline is September 3, 2026 at 20:00 UTC.
+- Pulled the official submission fields and judging criteria. The required external assets are a working live URL, a public licensed code repository, and a public narrated YouTube demo under three minutes.
+- Added a root README, MIT license, exact testing walkthrough, architecture explanation, five deployed-app screenshots, and a timed 1:44 demo-video script.
+- Generated a 1:44 narrated 1440 by 900 MP4 from the deployed walkthrough. Frame review confirmed native `WebMCP · 5 tools live`, the evidence flow, and the immutable approval close; the file is ready for participant review and public YouTube upload.
+- Drafted `devpost-submission.md` against the official fields, with claims tied to implemented behavior and completed verification.
+- Checklist item 12 remains open until the public repository URL and public YouTube URL exist and the participant confirms the final title, submitter type, and country of residence.
