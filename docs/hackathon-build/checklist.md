@@ -67,7 +67,7 @@
   Acceptance: The 10 MB cap, traversal/symlink/nested-archive/expansion/binary protections work; every file and warning is reviewable; nothing persists before confirmation; confirmed records survive sign-out/sign-in.
   Verify: Run parser security/golden tests, confirmation ownership/digest tests, and a Playwright prepared-import journey.
 
-- [ ] **10. Persist investigations, challenges, plans, approvals, and resume**
+- [x] **10. Persist investigations, challenges, plans, approvals, and resume**
   Spec ref: `spec.md > Architecture > Investigation and Approval Domain`
   What to build: Implement human-only Route Handlers for first-finding creation, challenge confirmation, draft plans, server-revalidated approval, append-only events, and the investigation-list/detail resume flow.
   Acceptance: Temporary audits create no durable finding; stale/cross-owner digests fail; approval stores exact version, digest, actor, time, rationale, and limitation; editing approved content creates `n+1`; reload restores the understandable decision without restarting agent work.

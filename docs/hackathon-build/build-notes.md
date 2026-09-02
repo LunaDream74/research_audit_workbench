@@ -328,3 +328,13 @@
 - Added a private workspace summary so confirmed experiment records remain visible after a fresh sign-in while RLS keeps them invisible to another account.
 - Browser verification exposed two timing issues: the upload control could be selected before client hydration, and the test could navigate away before a signup server action completed. The control now stays disabled until hydration, the Next.js test origin is explicitly allowed, and the journey waits for each authenticated redirect.
 - Verification passed: 17 Pytest tests, Ruff, TypeScript, ESLint, 9 Vitest tests, Next.js production build, regenerated OpenAPI/TypeScript contracts, 14 pgTAP assertions, and the Playwright prepared-import journey.
+
+## 2026-09-02 - Checklist item 10 participant checkpoint
+
+- Added authenticated, human-only Route Handlers for first-finding confirmation, challenge confirmation, validated draft plans, and exact approval. No durable transition is exposed through the five WebMCP tools.
+- Added transactional PostgreSQL functions that bind transitions to owned runs, the current analysis revision, the active plan version, and an exact digest. Stale and cross-owner attempts fail before a write.
+- Challenge confirmation creates analysis revision 2 while preserving revision 1. Plan edits after approval create `n+1`; approved versions remain immutable; investigation events are append-only for authenticated users.
+- Added the private persistent workflow and investigation detail route. The detail view restores the selected evidence, both interpretation revisions, exact approved plan and digest, researcher rationale, and event history without restarting any agent work.
+- Automated verification passed: 17 Pytest tests, Ruff, TypeScript, ESLint, 9 Vitest tests, Next.js production build, 26 pgTAP assertions, and all 4 Playwright journeys. The persistent journey covers import, finding save, challenge, plan edit, exact approval, reload, and resume.
+- Captured `test-results/persistent-checkpoint.png` for the required participant inspection. Item 10 remains open until that inspection passes.
+- Anh Minh approved the persistent-MVP visual checkpoint with “everything look good.” Item 10 is complete; item 11 is the next build slice.
