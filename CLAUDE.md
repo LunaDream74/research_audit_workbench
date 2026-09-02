@@ -10,3 +10,4 @@ Read in order: `docs/hackathon-build/checklist.md`, the active item's section in
 
 Preserve the core authority boundary: the external agent can inspect and stage; the researcher confirms every durable conclusion and approval.
 
+The JARVIS readiness engine lives in `apps/web/src/domain/jarvis-review.ts`. Keep its scoring deterministic and its suggestions proposal-only. UI actions may focus controls or stage audits, evidence views, challenge previews, and plan previews; they must never trigger durable saves, confirmations, approvals, or execution.

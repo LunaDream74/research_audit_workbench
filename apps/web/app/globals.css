@@ -63,6 +63,25 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .question-strip { display: flex; align-items: center; gap: 18px; border: 1px solid var(--line); background: rgba(8,19,16,.8); border-radius: 8px; padding: 14px 18px; }
 .question-strip span { color: var(--muted); text-transform: uppercase; font: 650 .69rem ui-monospace, monospace; letter-spacing: .08em; }
 .question-strip strong { font-size: .9rem; }
+.jarvis-panel { margin: 16px 0; padding: 22px; border: 1px solid rgba(139, 231, 180, .34); border-radius: 12px; background: radial-gradient(circle at 100% 0%, rgba(79, 214, 146, .11), transparent 28rem), rgba(9, 24, 19, .94); box-shadow: 0 18px 55px rgba(0, 0, 0, .2); }
+.jarvis-heading { display: flex; justify-content: space-between; align-items: start; gap: 20px; }
+.jarvis-heading h2 { margin: 0; font-size: 1.45rem; letter-spacing: -.035em; }
+.jarvis-score { display: flex; align-items: baseline; gap: 4px; color: var(--green); font-family: ui-monospace, monospace; }
+.jarvis-score strong { font-size: 2rem; line-height: 1; }
+.jarvis-score span { color: var(--muted); font-size: .72rem; }
+.jarvis-progress { height: 4px; overflow: hidden; margin: 18px 0 14px; border-radius: 99px; background: rgba(139, 231, 180, .09); }
+.jarvis-progress span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--green-strong), var(--green)); transition: width .25s ease; }
+.jarvis-summary { margin: 0 0 16px; color: #c6d8cf; line-height: 1.55; }
+.jarvis-next { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 24px; padding: 16px; border: 1px solid var(--line); border-radius: 9px; background: rgba(5, 14, 11, .62); }
+.jarvis-next span { color: var(--green); font: 650 .67rem ui-monospace, monospace; text-transform: uppercase; letter-spacing: .07em; }
+.jarvis-next h3 { margin: 6px 0 4px; font-size: 1rem; }
+.jarvis-next p { max-width: 760px; margin: 0; color: var(--muted); font-size: .82rem; line-height: 1.5; }
+.jarvis-next button { white-space: nowrap; }
+.jarvis-queue { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+.jarvis-queue > div { display: flex; gap: 10px; align-items: center; padding: 9px 11px; border: 1px solid var(--line); border-radius: 7px; }
+.jarvis-queue span { color: var(--muted); font: 650 .62rem ui-monospace, monospace; text-transform: uppercase; }
+.jarvis-queue strong { font-size: .75rem; }
+.jarvis-panel > small { display: block; margin-top: 13px; color: #739283; font: .65rem ui-monospace, monospace; }
 .run-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
 .run-card { background: rgba(12,23,20,.9); border: 1px solid var(--line); border-radius: 10px; padding: 20px; transition: border-color .2s, transform .2s; }
 .run-card.selected { border-color: var(--line-strong); box-shadow: inset 0 0 0 1px rgba(139,231,180,.07); }
@@ -156,6 +175,9 @@ textarea { min-height: 86px; margin: 8px 0 12px; resize: vertical; }
   .topbar { justify-content: center; padding: 16px 0; }
   .hero-panel { grid-template-columns: 1fr; gap: 24px; padding-top: 42px; }
   .run-grid, .evidence-grid { grid-template-columns: 1fr; }
+  .jarvis-next { grid-template-columns: 1fr; }
+  .jarvis-next button { width: 100%; }
+  .jarvis-queue { grid-template-columns: 1fr; }
   .plan-grid { grid-template-columns: 1fr 1fr; }
   .question-strip { align-items: flex-start; flex-direction: column; gap: 7px; }
 }
@@ -163,6 +185,8 @@ textarea { min-height: 86px; margin: 8px 0 12px; resize: vertical; }
 @media (max-width: 480px) {
   .plan-grid { grid-template-columns: 1fr; }
   .workflow-panel, .audit-panel { padding: 18px; }
+  .jarvis-panel { padding: 18px; }
+  .jarvis-heading { align-items: flex-start; flex-direction: column; }
   .auth-shell, .workspace-shell { padding: 7vh 16px; }
   .auth-card { padding: 22px 18px; }
   .auth-actions, .workspace-heading { align-items: stretch; flex-direction: column; }

@@ -15,7 +15,7 @@
   "project": {
     "name": "Research Audit Workbench",
     "summary": "A WebMCP-enabled experiment workbench for early-career ML researchers that imports persistent run records, audits comparison fairness across metadata, and requires human approval before saving agent findings or experiment plans.",
-    "ai_usage": "An external browser agent uses five WebMCP tools to inspect live comparison state and stage reversible work; deterministic application code owns facts, evidence, and validation.",
+    "ai_usage": "An external browser agent uses six WebMCP tools to inspect live comparison state, review decision readiness, and stage reversible work; deterministic application code owns facts, evidence, and validation.",
     "codex_usage": "Codex shaped the scope and architecture, implemented and debugged the vertical slices, configured deployment, and ran local and public verification."
   },
   "current_stage": "submit-project",

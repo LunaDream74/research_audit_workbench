@@ -1,5 +1,6 @@
 import type { DemoRun } from "@/src/demo/fixture";
 import type { ChallengePreview, ResolutionPlan } from "@/src/domain/investigation";
+import type { JarvisReview } from "@/src/domain/jarvis-review";
 import { toolResult } from "./adapter";
 import type { WebMCPTool } from "./types";
 
@@ -15,6 +16,7 @@ export type DemoToolContext = {
   showEvidence?: (findingId: string, evidenceRefIds?: string[]) => Record<string, unknown>;
   stageChallenge?: (findingId: string, researcherContext: string) => ChallengePreview | Record<string, unknown>;
   stagePlan?: (investigationId: string, constraints?: Record<string, unknown>) => ResolutionPlan | Record<string, unknown>;
+  reviewReadiness?: () => JarvisReview | Record<string, unknown>;
 };
 
 export function buildCoreDemoTools(context: DemoToolContext): WebMCPTool[] {
@@ -125,6 +127,20 @@ export function buildDemoTools(context: DemoToolContext): WebMCPTool[] {
           typeof args.constraints === "object" && args.constraints ? args.constraints as Record<string, unknown> : undefined,
         ) ?? { error: "plan_unavailable" }),
       }),
+    },
+    {
+      name: "review_investigation_readiness",
+      title: "Compare the investigation with a defensible decision",
+      description: "Review the live evidence, interpretation, and plan state, then rank the highest-value improvements. This is read-only and cannot save, confirm, approve, or execute anything.",
+      inputSchema: {
+        type: "object",
+        properties: {},
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: true },
+      execute: () => toolResult(
+        context.reviewReadiness?.() ?? { schemaVersion: "1.0", error: "review_unavailable" },
+      ),
     },
   ];
 }

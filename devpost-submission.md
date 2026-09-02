@@ -28,13 +28,16 @@ That authority boundary makes WebMCP useful here. The agent can work with the pa
 
 ## How We Used AI
 
-The runtime collaboration happens through an external browser agent using WebMCP. The page registers five tools:
+The runtime collaboration happens through an external browser agent using WebMCP. The page registers six tools:
 
 - `get_current_comparison`
 - `run_comparability_audit`
 - `show_finding_evidence`
 - `stage_challenge_revision`
 - `stage_resolution_plan`
+- `review_investigation_readiness`
+
+The sixth tool powers a JARVIS-style readiness critic that compares the live investigation against a defensible decision path, scores progress, and ranks the next improvements. The same advisor appears in the disposable demo and persistent workspace. It may stage reversible work and focus the required human control, but it cannot save, confirm, approve, or execute.
 
 The agent uses those tools to inspect the live pair and prepare reversible work. It does not generate the factual audit. Pure Python rules compare the normalized run snapshots, prefer recorded manifests over declared configuration, produce bounded citations, and avoid attributing any share of the eight-point score gap to the mismatch.
 
@@ -50,7 +53,7 @@ The final verification included 22 Pytest tests, Ruff, TypeScript, ESLint, 9 Vit
 
 ## Key Features
 
-- Five live, selection-scoped WebMCP tools behind one feature-detected adapter
+- Six live, selection-scoped WebMCP tools behind one feature-detected adapter
 - Deterministic candidate-pool audit with cautious language and recorded evidence priority
 - Side-by-side manifests with JSON locations, values, and source hashes
 - Researcher challenge flow that can revise an interpretation without erasing the limitation

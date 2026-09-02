@@ -49,12 +49,13 @@ describe("WebMCP adapter", () => {
     expect(result.structuredContent.error).toBe("stale_selection");
   });
 
-  it("exposes five tools while keeping every agent action reversible", () => {
+  it("exposes six tools while keeping every agent action reversible", () => {
     const tools = buildDemoTools({
       ...toolContext(),
       showEvidence: vi.fn(() => ({ schemaVersion: "1.0", opened: true })),
       stageChallenge: vi.fn(() => ({ schemaVersion: "1.0", preview: true })),
       stagePlan: vi.fn(() => ({ schemaVersion: "1.0", preview: true })),
+      reviewReadiness: vi.fn(() => ({ schemaVersion: "1.0", score: 45, nextAction: { id: "save_finding" } })),
     });
     expect(tools.map((tool) => tool.name)).toEqual([
       "get_current_comparison",
@@ -62,7 +63,22 @@ describe("WebMCP adapter", () => {
       "show_finding_evidence",
       "stage_challenge_revision",
       "stage_resolution_plan",
+      "review_investigation_readiness",
     ]);
     expect(tools.map((tool) => tool.name).join(" ")).not.toMatch(/approve|confirm|save|delete|execute_experiment/);
+  });
+
+  it("returns a read-only JARVIS review of the live workflow", async () => {
+    const reviewReadiness = vi.fn(() => ({
+      schemaVersion: "1.0",
+      score: 30,
+      nextAction: { id: "inspect_evidence", humanRequired: false },
+    }));
+    const tools = buildDemoTools({ ...toolContext(), reviewReadiness });
+    const reviewTool = tools.find((tool) => tool.name === "review_investigation_readiness");
+    expect(reviewTool?.annotations?.readOnlyHint).toBe(true);
+    const result = await reviewTool?.execute({});
+    expect(result?.structuredContent.score).toBe(30);
+    expect(reviewReadiness).toHaveBeenCalledOnce();
   });
 });

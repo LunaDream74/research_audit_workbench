@@ -375,3 +375,11 @@
 - Created the Devpost draft project, attached the complete write-up, links, technology tags, and public video, then uploaded the reviewed live-scope screenshot as its project thumbnail.
 - After Anh Minh's explicit `yes, submit` confirmation, sent the confirmed custom answers to The WebMCP Challenge. Devpost returned submission ID `1167584`.
 - Live readback showed project state `published` and a non-null challenge submission time. Public project page: `https://devpost.com/software/research-audit-workbench`.
+
+## 2026-09-03 - Post-submission JARVIS improvement
+
+- Added a deterministic investigation-readiness engine that scores the evidence-to-decision path from 0 to 100 and ranks the next three improvements from live state.
+- Added the JARVIS advisor to both the disposable demo and signed-in persistent investigation flow. It can stage audits, evidence views, challenge previews, and plan previews, or focus the exact human control required next.
+- Added a sixth read-only WebMCP tool, `review_investigation_readiness`, so an external browser agent can compare progress and explain the highest-value next step without receiving durable authority.
+- Preserved the authority boundary: JARVIS cannot save a finding, confirm a challenge, save or approve a plan, or execute an experiment.
+- Added domain, adapter, browser-journey, keyboard-focus, and element-level mobile-overflow coverage. TypeScript, ESLint, 14 Vitest tests, the production build, and all three disposable-demo Playwright journeys passed locally.

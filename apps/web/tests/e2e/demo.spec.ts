@@ -40,9 +40,43 @@ test("the public demo keeps keyboard focus visible on a narrow screen", async ({
   await page.goto("/demo");
 
   const auditButton = page.getByRole("button", { name: "Run prepared audit" });
+  await expect(auditButton).toBeEnabled();
   await auditButton.focus();
   await expect(auditButton).toBeFocused();
   await expect(auditButton).toHaveCSS("outline-style", "solid");
   await expect(page.locator("main")).not.toHaveCSS("overflow-x", "scroll");
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  const overflow = await page.evaluate(() => Array.from(document.querySelectorAll<HTMLElement>("body *"))
+    .map((element) => ({
+      element: `${element.tagName.toLowerCase()}${element.id ? `#${element.id}` : ""}${element.className ? `.${String(element.className).replace(/\s+/g, ".")}` : ""}`,
+      right: Math.round(element.getBoundingClientRect().right),
+      width: Math.round(element.getBoundingClientRect().width),
+    }))
+    .filter(({ right, width }) => width > 0 && right > document.documentElement.clientWidth + 1));
+  expect(overflow).toEqual([]);
+});
+
+test("JARVIS compares progress and stages only reversible next steps", async ({ page }) => {
+  const privateRequests: string[] = [];
+  page.on("request", (request) => {
+    if (/supabase|\/api\/investigations|\/api\/imports\/confirm/i.test(request.url())) {
+      privateRequests.push(request.url());
+    }
+  });
+
+  await page.goto("/demo");
+  const advisor = page.getByRole("region", { name: "JARVIS advisor" });
+  await expect(advisor).toContainText("10/ 100");
+  await expect(advisor).toContainText("Audit comparability before ranking");
+
+  await advisor.getByRole("button", { name: "Stage safe next step" }).click();
+  await expect(page.getByText("Model improvement not established.")).toBeVisible();
+  await expect(advisor).toContainText("30/ 100");
+  await expect(advisor).toContainText("Inspect the recorded source values");
+
+  await advisor.getByRole("button", { name: "Stage safe next step" }).click();
+  await expect(page.getByRole("region", { name: "Finding evidence" })).toBeVisible();
+  await expect(advisor).toContainText("45/ 100");
+  await expect(advisor).toContainText("Decide whether this finding belongs in the record");
+  await expect(advisor.getByRole("button", { name: "Show required control" })).toBeVisible();
+  expect(privateRequests).toEqual([]);
 });

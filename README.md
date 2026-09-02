@@ -8,17 +8,20 @@ The prepared walkthrough compares a run with 84% Recall@5 against a baseline wit
 
 ## What WebMCP does
 
-The page registers five tools through `document.modelContext.registerTool(...)`:
+The page registers six tools through `document.modelContext.registerTool(...)`:
 
 - `get_current_comparison` reads the selected runs, decision question, and evidence availability.
 - `run_comparability_audit` starts a deterministic audit for the current selection.
 - `show_finding_evidence` focuses the recorded evidence behind a finding.
 - `stage_challenge_revision` previews a revised interpretation with the factual limitation retained.
 - `stage_resolution_plan` previews a matched reevaluation plan.
+- `review_investigation_readiness` compares live evidence, interpretation, and plan state, scores decision readiness, and ranks the next improvements.
 
 These tools can inspect live page state and stage reversible changes. They cannot confirm an import, save a finding, persist a challenge, approve a plan, delete data, or launch an experiment. Those actions remain explicit human decisions.
 
-Chrome without WebMCP support keeps the same manual walkthrough. A WebMCP-enabled browser exposes the five tools to its agent.
+The JARVIS advisor uses the same deterministic readiness review in both the public demo and signed-in investigation flow. It can stage reversible work or focus the exact researcher control required next; it cannot click a durable action on the researcher's behalf.
+
+Chrome without WebMCP support keeps the same manual walkthrough. A WebMCP-enabled browser exposes all six tools to its agent.
 
 ## Architecture
 

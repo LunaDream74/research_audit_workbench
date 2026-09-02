@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { JarvisAdvisor } from "@/components/jarvis-advisor";
 import {
   createChallengePreview,
   createResolutionPlan,
@@ -9,6 +10,7 @@ import {
   type ResolutionPlan,
   validatePlan,
 } from "@/src/domain/investigation";
+import { reviewInvestigation } from "@/src/domain/jarvis-review";
 import { demoQuestion, demoRuns, recordedScore, selectedPairLabel } from "@/src/demo/fixture";
 import { registerWebMCPTools } from "@/src/webmcp/adapter";
 import { buildDemoTools } from "@/src/webmcp/demo-tools";
@@ -27,6 +29,7 @@ export function DemoWorkbench() {
   const [auditState, setAuditState] = useState<AuditState>("idle");
   const [webMCPStatus, setWebMCPStatus] = useState<"checking" | "native" | "fallback">("checking");
   const [evidenceOpen, setEvidenceOpen] = useState(false);
+  const [evidenceInspected, setEvidenceInspected] = useState(false);
   const [investigationSaved, setInvestigationSaved] = useState(false);
   const [challengeText, setChallengeText] = useState("The smaller pool was an intentional sanity check.");
   const [challengePreview, setChallengePreview] = useState<ChallengePreview | null>(null);
@@ -40,11 +43,24 @@ export function DemoWorkbench() {
   const pairLabel = useMemo(() => selectedPairLabel(selected), [selected]);
   const pairReady = selected.length === 2;
   const selectionDigest = `demo-${selected.join("-")}-v1`;
-  const planValidation = plan ? validatePlan(plan) : null;
+  const planValidation = useMemo(() => plan ? validatePlan(plan) : null, [plan]);
+  const jarvisReview = useMemo(() => reviewInvestigation({
+    pairReady,
+    auditComplete: auditState === "complete",
+    evidenceInspected,
+    findingSaved: investigationSaved,
+    challengePreviewed: Boolean(challengePreview),
+    challengeConfirmed,
+    planDrafted: Boolean(plan),
+    planValidation,
+    digestReady: Boolean(planDigest),
+    approved: Boolean(approval),
+  }), [approval, auditState, challengeConfirmed, challengePreview, evidenceInspected, investigationSaved, pairReady, plan, planDigest, planValidation]);
 
   function resetInvestigation() {
     setAuditState("idle");
     setEvidenceOpen(false);
+    setEvidenceInspected(false);
     setInvestigationSaved(false);
     setChallengePreview(null);
     setChallengeConfirmed(false);
@@ -64,6 +80,11 @@ export function DemoWorkbench() {
       evidenceRefIds: ["run-a:manifest:candidate-count", "run-b:manifest:candidate-count"],
     };
   }, [selectionDigest]);
+
+  const openEvidence = useCallback(() => {
+    setEvidenceOpen(true);
+    setEvidenceInspected(true);
+  }, []);
 
   const stageChallenge = useCallback((context = challengeText) => {
     const preview = createChallengePreview(context);
@@ -94,7 +115,7 @@ export function DemoWorkbench() {
         runAudit: () => revealAudit(),
         showEvidence: (findingId) => {
           if (findingId !== "candidate-pool-mismatch") return { schemaVersion: "1.0", error: "finding_not_found" };
-          setEvidenceOpen(true);
+          openEvidence();
           return {
             schemaVersion: "1.0",
             opened: true,
@@ -116,6 +137,7 @@ export function DemoWorkbench() {
           if (investigationId !== "demo-investigation-1") return { error: "investigation_not_found" };
           return stagePlan();
         },
+        reviewReadiness: () => jarvisReview,
       }),
     );
     registration.ready.then(
@@ -126,7 +148,7 @@ export function DemoWorkbench() {
       active = false;
       registration.abort();
     };
-  }, [challengeConfirmed, investigationSaved, revealAudit, selected, selectionDigest, stageChallenge, stagePlan]);
+  }, [challengeConfirmed, investigationSaved, jarvisReview, openEvidence, revealAudit, selected, selectionDigest, stageChallenge, stagePlan]);
 
   useEffect(() => {
     let active = true;
@@ -160,6 +182,54 @@ export function DemoWorkbench() {
     });
   }
 
+  function focusControl(id: string) {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        const section = document.getElementById(id);
+        section?.scrollIntoView({ behavior: "smooth", block: "center" });
+        section?.querySelector<HTMLElement>("button:not(:disabled), textarea:not(:disabled), input:not(:disabled)")?.focus({ preventScroll: true });
+      });
+    });
+  }
+
+  function runJarvisNextAction() {
+    switch (jarvisReview.nextAction.id) {
+      case "select_runs":
+        focusControl("run-selection");
+        break;
+      case "run_audit":
+        revealAudit();
+        focusControl("comparability-audit");
+        break;
+      case "inspect_evidence":
+        openEvidence();
+        focusControl("finding-evidence");
+        break;
+      case "save_finding":
+        focusControl("comparability-audit");
+        break;
+      case "stage_challenge":
+        stageChallenge();
+        focusControl("researcher-challenge");
+        break;
+      case "confirm_challenge":
+        focusControl("researcher-challenge");
+        break;
+      case "stage_plan":
+        stagePlan();
+        focusControl("resolution-plan");
+        break;
+      case "fix_plan":
+      case "save_plan":
+      case "approve_plan":
+        focusControl("resolution-plan");
+        break;
+      case "complete":
+        focusControl("approval-record");
+        break;
+    }
+  }
+
   return (
     <main className="workbench">
       <header className="topbar">
@@ -169,7 +239,7 @@ export function DemoWorkbench() {
         </div>
         <div className="header-badges">
           <div className={`mcp-badge ${webMCPStatus}`}>
-            {webMCPStatus === "native" ? "WebMCP · 5 tools live" : "WebMCP · manual fallback"}
+            {webMCPStatus === "native" ? "WebMCP · 6 tools live" : "WebMCP · manual fallback"}
           </div>
           <div className="demo-badge"><span /> Demo data · nothing is saved</div>
         </div>
@@ -189,7 +259,9 @@ export function DemoWorkbench() {
 
       <section className="question-strip"><span>Decision question</span><strong>{demoQuestion}</strong></section>
 
-      <section className="run-grid" aria-label="Experiment runs">
+      <JarvisAdvisor review={jarvisReview} onNextAction={runJarvisNextAction} />
+
+      <section className="run-grid" id="run-selection" aria-label="Experiment runs">
         {demoRuns.map((run) => {
           const isSelected = selected.includes(run.id);
           return (
@@ -208,7 +280,7 @@ export function DemoWorkbench() {
         })}
       </section>
 
-      <section className="audit-panel">
+      <section className="audit-panel" id="comparability-audit">
         <div className="audit-header">
           <div><p className="eyebrow">Neutral audit</p><h2>Comparability, before ranking</h2></div>
           <button disabled={!pairReady || webMCPStatus === "checking"} onClick={() => revealAudit()} type="button">Run prepared audit</button>
@@ -223,7 +295,7 @@ export function DemoWorkbench() {
               <div className="finding-title-row"><h3>Different evaluation conditions</h3><span>Critical · manifest verified</span></div>
               <p><strong>Model improvement not established.</strong> Run A used 200 candidate images per query; Run B used 1,000. Both scores remain valid individually, but they do not support direct model ranking under matched conditions.</p>
               <div className="finding-actions">
-                <button className="secondary-button" onClick={() => setEvidenceOpen(true)} type="button">Inspect cited evidence</button>
+                <button className="secondary-button" onClick={openEvidence} type="button">Inspect cited evidence</button>
                 {!investigationSaved ? <button onClick={() => setInvestigationSaved(true)} type="button">Save finding and create investigation</button> : <span className="saved-label">✓ Finding saved by researcher</span>}
               </div>
               <p className="limitation">This evidence illustrates why the evaluations differ. It does not quantify how much of the eight-point gap the mismatch caused.</p>
@@ -233,7 +305,7 @@ export function DemoWorkbench() {
       </section>
 
       {evidenceOpen && (
-        <section className="workflow-panel evidence-panel" aria-label="Finding evidence">
+        <section className="workflow-panel evidence-panel" id="finding-evidence" aria-label="Finding evidence">
           <div className="panel-heading"><div><p className="eyebrow">Inspectable trust</p><h2>Candidate-pool evidence</h2></div><button className="text-button" onClick={() => setEvidenceOpen(false)} type="button">Close</button></div>
           <div className="evidence-grid">
             <div><span>Run A · recorded input</span><strong>200 candidates</strong><code>run-a/candidate_manifest.json → /candidate_count</code><small>sha256:run-a-manifest</small></div>
@@ -244,7 +316,7 @@ export function DemoWorkbench() {
       )}
 
       {investigationSaved && (
-        <section className="workflow-panel">
+        <section className="workflow-panel" id="researcher-challenge">
           <div className="panel-heading"><div><p className="eyebrow">Human challenge</p><h2>Add research context without erasing evidence</h2></div><span className="step-chip">Investigation demo-investigation-1</span></div>
           <label className="field-label" htmlFor="challenge">Researcher context</label>
           <textarea id="challenge" onChange={(event) => setChallengeText(event.target.value)} value={challengeText} />
@@ -261,7 +333,7 @@ export function DemoWorkbench() {
       )}
 
       {challengeConfirmed && (
-        <section className="workflow-panel">
+        <section className="workflow-panel" id="resolution-plan">
           <div className="panel-heading"><div><p className="eyebrow">Controlled resolution</p><h2>Approve an exact reevaluation plan</h2></div>{plan && <span className="step-chip">Draft v{plan.version}</span>}</div>
           {!plan ? <button onClick={() => stagePlan()} type="button">Draft matched reevaluation plan</button> : (
             <div className="plan-editor">
@@ -284,7 +356,7 @@ export function DemoWorkbench() {
       )}
 
       {approval && (
-        <section className="approval-record" role="status">
+        <section className="approval-record" id="approval-record" role="status">
           <div className="approval-mark">✓</div>
           <div><p className="eyebrow">Immutable demo history</p><h2>{approval.status} · plan v{approval.version}</h2><p>{approval.rationale}</p>{approval.warning && <p className="approval-warning">Accepted: {approval.warning}</p>}<code>{approval.digest}</code><small>Approved by researcher · no execution permission granted</small></div>
         </section>

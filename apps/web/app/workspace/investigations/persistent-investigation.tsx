@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { JarvisAdvisor } from "@/components/jarvis-advisor";
 import {
   createChallengePreview,
   createResolutionPlan,
   type ChallengePreview,
   type ResolutionPlan,
+  validatePlan,
 } from "@/src/domain/investigation";
+import { reviewInvestigation } from "@/src/domain/jarvis-review";
 
 type RunRecord = { id: string; name: string; metrics: unknown; config: unknown; source_snapshot: unknown };
 type SavedPlan = { plan_version: number; digest: string; plan: ResolutionPlan; validation: { limitations: string[]; informationalWarnings: string[] } };
@@ -26,6 +29,51 @@ export function PersistentInvestigation({ runs }: { runs: RunRecord[] }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const selectionDigest = `owned:${runs[0].id}:${runs[1].id}`;
+  const planValidation = useMemo(() => validatePlan(plan), [plan]);
+  const jarvisReview = useMemo(() => reviewInvestigation({
+    pairReady: true,
+    auditComplete: true,
+    evidenceInspected: true,
+    findingSaved: Boolean(investigationId),
+    challengePreviewed: Boolean(challengePreview),
+    challengeConfirmed: revision >= 2,
+    planDrafted: revision >= 2,
+    planValidation: revision >= 2 ? planValidation : null,
+    digestReady: Boolean(savedPlan),
+    approved: false,
+  }), [challengePreview, investigationId, planValidation, revision, savedPlan]);
+
+  function focusControl(id: string) {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        const section = document.getElementById(id);
+        section?.scrollIntoView({ behavior: "smooth", block: "center" });
+        section?.querySelector<HTMLElement>("button:not(:disabled), textarea:not(:disabled), input:not(:disabled)")?.focus({ preventScroll: true });
+      });
+    });
+  }
+
+  function runJarvisNextAction() {
+    switch (jarvisReview.nextAction.id) {
+      case "stage_challenge":
+        setChallengePreview(createChallengePreview(challengeText));
+        focusControl("persistent-challenge");
+        break;
+      case "save_finding":
+        focusControl("persistent-finding");
+        break;
+      case "confirm_challenge":
+        focusControl("persistent-challenge");
+        break;
+      case "fix_plan":
+      case "save_plan":
+      case "approve_plan":
+        focusControl("persistent-plan");
+        break;
+      default:
+        focusControl("persistent-finding");
+    }
+  }
 
   async function call(path: string, body: unknown) {
     setBusy(true);
@@ -88,7 +136,8 @@ export function PersistentInvestigation({ runs }: { runs: RunRecord[] }) {
   return (
     <div className="persistent-flow" aria-busy={busy}>
       <div className="workspace-heading"><div><p className="eyebrow">Persistent control room</p><h1>Turn evidence into a durable decision</h1></div><span className="step-chip">Human confirmation only</span></div>
-      <section className="comparison-panel">
+      <JarvisAdvisor review={jarvisReview} onNextAction={runJarvisNextAction} />
+      <section className="comparison-panel" id="persistent-finding">
         <h2>{question}</h2>
         <div className="run-preview-grid">{runs.map((run) => <article key={run.id}><strong>{run.name}</strong><span>{JSON.stringify(run.metrics)}</span></article>)}</div>
         <div className="finding"><div className="finding-icon">!</div><div className="finding-body"><h3>Different evaluation conditions</h3><p>Run A used 200 candidates and Run B used 1,000. Both scores remain visible, but direct ranking is unsupported.</p>
@@ -96,13 +145,13 @@ export function PersistentInvestigation({ runs }: { runs: RunRecord[] }) {
         </div></div>
       </section>
 
-      {investigationId && revision === 1 && <section className="challenge-panel">
+      {investigationId && revision === 1 && <section className="challenge-panel" id="persistent-challenge">
         <p className="eyebrow">Researcher challenge</p><h2>Revise the interpretation, retain the evidence</h2>
         <textarea aria-label="Researcher context" onChange={(event) => setChallengeText(event.target.value)} value={challengeText} />
         {!challengePreview ? <button onClick={() => setChallengePreview(createChallengePreview(challengeText))}>Preview revised interpretation</button> : <div className="challenge-diff"><p>{challengePreview.proposedInterpretation}</p><p className="retained"><strong>Retained limitation:</strong> {challengePreview.retainedLimitation}</p><button disabled={busy} onClick={confirmChallenge}>Confirm challenge and revision</button></div>}
       </section>}
 
-      {revision >= 2 && <section className="plan-panel">
+      {revision >= 2 && <section className="plan-panel" id="persistent-plan">
         <p className="eyebrow">Versioned resolution plan</p><h2>Approve only the exact matched reevaluation</h2>
         <div className="plan-grid">
           <label>Run A candidate pool<input aria-label="Run A candidate pool" disabled={!!savedPlan} type="number" value={plan.candidatePoolA} onChange={(event) => setPlan({ ...plan, candidatePoolA: Number(event.target.value) })} /></label>
