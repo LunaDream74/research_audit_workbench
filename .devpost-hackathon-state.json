@@ -18,7 +18,7 @@
     "ai_usage": "An external browser agent uses five WebMCP tools to inspect live comparison state and stage reversible work; deterministic application code owns facts, evidence, and validation.",
     "codex_usage": "Codex shaped the scope and architecture, implemented and debugged the vertical slices, configured deployment, and ran local and public verification."
   },
-  "current_stage": "prepare-submission",
+  "current_stage": "submit-project",
   "completed_stages": [
     "start-hackathon",
     "review",
@@ -42,7 +42,7 @@
   },
   "submission": {
     "draft_file": "devpost-submission.md",
-    "status": "drafting"
+    "status": "ready"
   },
   "next_command": "submit-project"
 }
