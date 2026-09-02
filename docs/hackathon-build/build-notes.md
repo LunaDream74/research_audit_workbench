@@ -369,3 +369,9 @@
 - Published local `main` to `https://github.com/LunaDream74/research_audit_workbench` and verified the public branch, README, and MIT license through GitHub.
 - The Devpost draft now contains the confirmed title, individual submitter type, Vietnam residence, public application URL, public source repository, public narrated YouTube video, exact testing walkthrough, five screenshots, architecture, AI usage, Codex usage, and known limitations.
 - All checklist items are complete. The next stage is the final Devpost readiness check; no project has been sent to Devpost yet.
+
+## 2026-09-03 - Devpost submission verified
+
+- Created the Devpost draft project, attached the complete write-up, links, technology tags, and public video, then uploaded the reviewed live-scope screenshot as its project thumbnail.
+- After Anh Minh's explicit `yes, submit` confirmation, sent the confirmed custom answers to The WebMCP Challenge. Devpost returned submission ID `1167584`.
+- Live readback showed project state `published` and a non-null challenge submission time. Public project page: `https://devpost.com/software/research-audit-workbench`.

@@ -23,7 +23,8 @@
     "start-hackathon",
     "review",
     "resources",
-    "prepare-submission"
+    "prepare-submission",
+    "submit-project"
   ],
   "rules_acknowledged": true,
   "learning": {
@@ -42,7 +43,10 @@
   },
   "submission": {
     "draft_file": "devpost-submission.md",
-    "status": "ready"
+    "status": "submitted",
+    "submission_id": 1167584,
+    "url": "https://devpost.com/software/research-audit-workbench",
+    "submitted_at": "2026-09-02T14:58:28.804-04:00"
   },
-  "next_command": "submit-project"
+  "next_command": "hackathon-map"
 }
