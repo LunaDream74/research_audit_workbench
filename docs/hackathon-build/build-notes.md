@@ -356,3 +356,9 @@
 - Generated a 1:44 narrated 1440 by 900 MP4 from the deployed walkthrough. Frame review confirmed native `WebMCP · 5 tools live`, the evidence flow, and the immutable approval close; the file is ready for participant review and public YouTube upload.
 - Drafted `devpost-submission.md` against the official fields, with claims tied to implemented behavior and completed verification.
 - Checklist item 12 remains open until the public repository URL and public YouTube URL exist and the participant confirms the final title, submitter type, and country of residence.
+
+## 2026-09-03 - Submission assets confirmed
+
+- Anh Minh confirmed the title `Research Audit Workbench`, submitter type `Individual`, country of residence `Vietnam`, and completion of the production database-password rotation.
+- Verified the public YouTube video at `https://youtu.be/bwVSzirSxCA`; its public metadata title is `Research Audit Workbench`.
+- Verified that `https://github.com/LunaDream74/research_audit_workbench` is public. The repository is still empty, with no Git refs and a reported size of zero, so checklist item 12 and the prepare stage remain open until the current main branch is pushed.

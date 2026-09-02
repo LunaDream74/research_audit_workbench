@@ -88,15 +88,15 @@ https://webmcp-research-auditor.vercel.app/demo
 
 ## Public Repository Link
 
-`[REQUIRED BEFORE SUBMISSION: create a public GitHub, GitLab, or Bitbucket repository and paste its URL here]`
+https://github.com/LunaDream74/research_audit_workbench
 
-The repository already contains the complete source, setup instructions, prepared fixture, migrations, tests, and an MIT license.
+`[BLOCKED BEFORE SUBMISSION: the public repository exists but is currently empty. Push the current main branch so it contains the complete source, setup instructions, prepared fixture, migrations, tests, and MIT license.]`
 
 ## Demo Video
 
-`[REQUIRED BEFORE SUBMISSION: public YouTube URL for a narrated video under three minutes]`
+https://youtu.be/bwVSzirSxCA
 
-A timed 1:44 recording script is ready in `docs/demo-video-script.md`. A narrated 1440 by 900 MP4 has been generated locally and is ready for participant review and YouTube upload.
+The public video is titled `Research Audit Workbench`. A matching timed 1:44 script is available in `docs/demo-video-script.md`.
 
 ## Screenshot Shot List
 
@@ -113,11 +113,11 @@ A timed 1:44 recording script is ready in `docs/demo-video-script.md`. A narrate
 - [x] Five submission screenshots were captured from the deployed app and reviewed.
 - [x] Setup, architecture, testing, known limits, AI usage, and Codex usage are documented.
 - [x] MIT license is present at the repository root.
-- [ ] Confirm the final title and one-line summary.
-- [ ] Create the public repository, push the current branch, and add the repository URL.
+- [x] Confirm the final title and one-line summary.
+- [ ] Push the current main branch to the empty public repository and verify the README and MIT license render.
 - [x] Generate a narrated 1:44 MP4 from the deployed WebMCP-enabled walkthrough.
-- [ ] Review the MP4, upload it publicly to YouTube, and add the URL.
-- [ ] Confirm the submitter type and country of residence for the official form.
+- [x] Publish the narrated video on YouTube and verify its public metadata.
+- [x] Confirm the submitter type and country of residence for the official form.
 
 ## Known Limitations
 
@@ -129,14 +129,14 @@ A timed 1:44 recording script is ready in `docs/demo-video-script.md`. A narrate
 
 ## TODO Official Form Fields
 
-- Submitter Type: `[CONFIRM: likely Individual]`
-- Country of residence: `[REQUIRED: participant input]`
+- Submitter Type: `Individual`
+- Country of residence: `Vietnam`
 - Organization name: `Not applicable unless submitting for an organization`
 - App Status: `New`
 - Existing-app update explanation: `Not applicable`
 - Live URL: `https://webmcp-research-auditor.vercel.app/demo`
 - Testing instructions: use the eight-step walkthrough above; no credentials required
-- Public code repository: `[REQUIRED BEFORE SUBMISSION]`
+- Public code repository: `https://github.com/LunaDream74/research_audit_workbench` (repository is public but must be populated before submission)
 - Agent/client testing: `Chrome 151 with experimental web platform features for native five-tool invocation; standard Chrome for manual fallback; mocked document.modelContext for adapter unit tests`
 - AI tools used during development: `Codex and Claude Code`
 - Learning derived: `Significant`
