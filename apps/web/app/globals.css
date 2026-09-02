@@ -175,3 +175,24 @@ textarea { min-height: 86px; margin: 8px 0 12px; resize: vertical; }
 .investigation-list { display: grid; gap: 10px; margin-top: 24px; }
 .investigation-list a { color: var(--text); text-decoration: none; display: flex; gap: 16px; border: 1px solid var(--line); padding: 16px; border-radius: 8px; }
 .investigation-list span { color: var(--green); text-transform: uppercase; font: .68rem ui-monospace, monospace; }
+.import-layout { display: grid; gap: 1.25rem; }
+.import-upload, .import-review, .import-success { border: 1px solid var(--line); background: var(--panel); padding: 1.4rem; }
+.import-upload { max-width: 760px; }
+.file-picker { display: grid; gap: .55rem; margin: 1.2rem 0; color: var(--muted); }
+.file-picker input { padding: .85rem; border: 1px dashed var(--line-strong); background: var(--bg); color: var(--text); }
+.boundary-note { color: var(--muted); font-size: .82rem; }
+.review-heading { display: flex; justify-content: space-between; align-items: start; gap: 1rem; }
+.review-heading > span { border: 1px solid var(--green); color: var(--green); padding: .3rem .55rem; text-transform: uppercase; font-size: .72rem; }
+.run-preview-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin: 1rem 0; }
+.run-preview-grid article { display: grid; gap: .35rem; border: 1px solid var(--line); padding: .9rem; }
+.run-preview-grid span { color: var(--muted); }
+.file-inventory { max-height: 300px; overflow: auto; border: 1px solid var(--line); margin-bottom: 1rem; }
+.file-inventory > div { display: flex; justify-content: space-between; gap: 1rem; padding: .65rem .75rem; border-bottom: 1px solid var(--line); }
+.file-inventory span { color: var(--muted); font-size: .78rem; }
+.import-review .digest-line { margin: 1rem 0; }
+@media (max-width: 700px) { .run-preview-grid { grid-template-columns: 1fr; } .file-inventory > div { display: grid; } }
+.imported-experiments { margin-top: 2rem; }
+.imported-experiments article { border: 1px solid var(--line); padding: 1rem; }
+.imported-experiments article h2 { text-transform: capitalize; }
+.imported-experiments article div { display: flex; gap: .5rem; }
+.imported-experiments article span { border: 1px solid var(--line); color: var(--muted); padding: .35rem .55rem; }

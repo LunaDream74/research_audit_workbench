@@ -6,6 +6,7 @@ from .contracts import (
     ImportPreview,
     PlanValidationRequest,
     PlanValidationResult,
+    PreviewFile,
     ResolutionPlan,
     RunSnapshot,
 )
@@ -18,7 +19,7 @@ __all__ = [
     "ImportPreview",
     "PlanValidationRequest",
     "PlanValidationResult",
+    "PreviewFile",
     "ResolutionPlan",
     "RunSnapshot",
 ]
-

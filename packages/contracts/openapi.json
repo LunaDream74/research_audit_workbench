@@ -104,6 +104,25 @@
         "title": "AuditStage",
         "type": "object"
       },
+      "Body_preview_import_v1_imports_preview_post": {
+        "properties": {
+          "package": {
+            "contentMediaType": "application/octet-stream",
+            "title": "Package",
+            "type": "string"
+          },
+          "schema_version": {
+            "default": "1.0",
+            "title": "Schema Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "package"
+        ],
+        "title": "Body_preview_import_v1_imports_preview_post",
+        "type": "object"
+      },
       "ComparabilityRequest": {
         "additionalProperties": false,
         "properties": {
@@ -287,6 +306,111 @@
           }
         },
         "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "ImportPreview": {
+        "properties": {
+          "audit_readiness": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Audit Readiness",
+            "type": "object"
+          },
+          "digest": {
+            "title": "Digest",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/PreviewFile"
+            },
+            "title": "Files",
+            "type": "array"
+          },
+          "preview_id": {
+            "title": "Preview Id",
+            "type": "string"
+          },
+          "proposed_artifacts": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Proposed Artifacts",
+            "type": "array"
+          },
+          "proposed_experiment": {
+            "additionalProperties": true,
+            "title": "Proposed Experiment",
+            "type": "object"
+          },
+          "proposed_runs": {
+            "items": {
+              "$ref": "#/components/schemas/RunSnapshot"
+            },
+            "title": "Proposed Runs",
+            "type": "array"
+          },
+          "schema_version": {
+            "const": "1.0",
+            "default": "1.0",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Warnings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "preview_id",
+          "digest",
+          "files",
+          "proposed_experiment",
+          "proposed_runs",
+          "proposed_artifacts",
+          "warnings",
+          "audit_readiness"
+        ],
+        "title": "ImportPreview",
+        "type": "object"
+      },
+      "PreviewFile": {
+        "properties": {
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          },
+          "proposed_run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Run Id"
+          },
+          "sha256": {
+            "title": "Sha256",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "sha256",
+          "kind"
+        ],
+        "title": "PreviewFile",
         "type": "object"
       },
       "RunSnapshot": {
@@ -509,6 +633,65 @@
         "summary": "Comparability",
         "tags": [
           "audits"
+        ]
+      }
+    },
+    "/v1/imports/preview": {
+      "post": {
+        "operationId": "preview_import_v1_imports_preview_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_preview_import_v1_imports_preview_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportPreview"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Preview Import",
+        "tags": [
+          "imports"
         ]
       }
     }

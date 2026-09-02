@@ -38,6 +38,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/imports/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Preview Import */
+        post: operations["preview_import_v1_imports_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -82,6 +99,16 @@ export interface components {
              * @constant
              */
             status: "completed";
+        };
+        /** Body_preview_import_v1_imports_preview_post */
+        Body_preview_import_v1_imports_preview_post: {
+            /** Package */
+            package: string;
+            /**
+             * Schema Version
+             * @default 1.0
+             */
+            schema_version: string;
         };
         /** ComparabilityRequest */
         ComparabilityRequest: {
@@ -151,6 +178,48 @@ export interface components {
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /** ImportPreview */
+        ImportPreview: {
+            /** Audit Readiness */
+            audit_readiness: {
+                [key: string]: string;
+            };
+            /** Digest */
+            digest: string;
+            /** Files */
+            files: components["schemas"]["PreviewFile"][];
+            /** Preview Id */
+            preview_id: string;
+            /** Proposed Artifacts */
+            proposed_artifacts: {
+                [key: string]: unknown;
+            }[];
+            /** Proposed Experiment */
+            proposed_experiment: {
+                [key: string]: unknown;
+            };
+            /** Proposed Runs */
+            proposed_runs: components["schemas"]["RunSnapshot"][];
+            /**
+             * Schema Version
+             * @default 1.0
+             * @constant
+             */
+            schema_version: "1.0";
+            /** Warnings */
+            warnings: string[];
+        };
+        /** PreviewFile */
+        PreviewFile: {
+            /** Kind */
+            kind: string;
+            /** Path */
+            path: string;
+            /** Proposed Run Id */
+            proposed_run_id?: string | null;
+            /** Sha256 */
+            sha256: string;
         };
         /** RunSnapshot */
         RunSnapshot: {
@@ -243,6 +312,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AuditResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_import_v1_imports_preview_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_preview_import_v1_imports_preview_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImportPreview"];
                 };
             };
             /** @description Validation Error */

@@ -319,3 +319,12 @@
 - Local Supabase migration and seed application passed. Nine pgTAP checks passed against the live database, covering forged ownership, cross-user reads, distinct runs, and approved-plan update/delete rejection.
 - Added a browser auth journey proving anonymous redirect and local account access. The first parallel run exposed a hydration race in the existing demo test; after participant confirmation, the audit control now waits for WebMCP initialization and both Playwright journeys pass in parallel.
 - Full verification passed: TypeScript, ESLint, 9 Vitest tests, 8 Pytest tests, Ruff, Next.js production build, 2 Playwright journeys, and 9 database tests.
+
+## 2026-09-02 - Checklist item 9 completed
+
+- Added bounded prepared-ZIP parsing and `POST /v1/imports/preview` with compressed, expanded-size, per-file, file-count, depth, traversal, symlink, nested-archive, binary/checkpoint, duplicate-path, schema, and compression-ratio protections.
+- Added the authenticated import-review UI and Next.js preview proxy. Every received file, content hash, proposed relationship, warning, run metric, candidate count, readiness result, and canonical digest is visible before persistence.
+- Added the human-only confirmation route. It reparses the original package, rejects changed digests, and calls one owner-scoped PostgreSQL transaction that creates the import attempt, experiment, two runs, artifacts, and run-artifact relationships.
+- Added a private workspace summary so confirmed experiment records remain visible after a fresh sign-in while RLS keeps them invisible to another account.
+- Browser verification exposed two timing issues: the upload control could be selected before client hydration, and the test could navigate away before a signup server action completed. The control now stays disabled until hydration, the Next.js test origin is explicitly allowed, and the journey waits for each authenticated redirect.
+- Verification passed: 17 Pytest tests, Ruff, TypeScript, ESLint, 9 Vitest tests, Next.js production build, regenerated OpenAPI/TypeScript contracts, 14 pgTAP assertions, and the Playwright prepared-import journey.

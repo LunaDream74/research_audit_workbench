@@ -61,7 +61,7 @@
   Acceptance: Private routes require auth; users cannot read or mutate another owner's rows/artifacts; investigations require two distinct owned runs; approved plans cannot be edited in place; demo remains independent.
   Verify: Run migration/seed checks, RLS cross-user tests, plan-immutability tests, and authenticated/unauthenticated route tests.
 
-- [ ] **9. Implement safe prepared-package preview and human confirmation**
+- [x] **9. Implement safe prepared-package preview and human confirmation**
   Spec ref: `spec.md > Data Flow > Prepared Import Lifecycle`
   What to build: Add bounded ZIP parsing and `POST /v1/imports/preview`, then the import-review screen and human-only `POST /api/imports/confirm` transaction for valid records and allowed artifacts.
   Acceptance: The 10 MB cap, traversal/symlink/nested-archive/expansion/binary protections work; every file and warning is reviewable; nothing persists before confirmation; confirmed records survive sign-out/sign-in.
