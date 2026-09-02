@@ -90,7 +90,7 @@ https://webmcp-research-auditor.vercel.app/demo
 
 https://github.com/LunaDream74/research_audit_workbench
 
-`[BLOCKED BEFORE SUBMISSION: the public repository exists but is currently empty. Push the current main branch so it contains the complete source, setup instructions, prepared fixture, migrations, tests, and MIT license.]`
+The public repository contains the complete source, setup instructions, prepared fixture, migrations, tests, and MIT license.
 
 ## Demo Video
 
@@ -114,7 +114,7 @@ The public video is titled `Research Audit Workbench`. A matching timed 1:44 scr
 - [x] Setup, architecture, testing, known limits, AI usage, and Codex usage are documented.
 - [x] MIT license is present at the repository root.
 - [x] Confirm the final title and one-line summary.
-- [ ] Push the current main branch to the empty public repository and verify the README and MIT license render.
+- [x] Publish the current main branch and verify the public README and MIT license.
 - [x] Generate a narrated 1:44 MP4 from the deployed WebMCP-enabled walkthrough.
 - [x] Publish the narrated video on YouTube and verify its public metadata.
 - [x] Confirm the submitter type and country of residence for the official form.
@@ -136,7 +136,7 @@ The public video is titled `Research Audit Workbench`. A matching timed 1:44 scr
 - Existing-app update explanation: `Not applicable`
 - Live URL: `https://webmcp-research-auditor.vercel.app/demo`
 - Testing instructions: use the eight-step walkthrough above; no credentials required
-- Public code repository: `https://github.com/LunaDream74/research_audit_workbench` (repository is public but must be populated before submission)
+- Public code repository: `https://github.com/LunaDream74/research_audit_workbench`
 - Agent/client testing: `Chrome 151 with experimental web platform features for native five-tool invocation; standard Chrome for manual fallback; mocked document.modelContext for adapter unit tests`
 - AI tools used during development: `Codex and Claude Code`
 - Learning derived: `Significant`

@@ -79,7 +79,7 @@
   Acceptance: The deployed URL completes selection -> WebMCP audit -> evidence -> challenge -> validated exact approval; import and resume work when authenticated; demo creates no durable rows; all P0 checks pass and P1 remains untouched.
   Verify: Run full lint/typecheck/Pytest/Vitest/Playwright suites, OpenAPI diff check, deployed health/preview/audit/validation smoke tests, and a three-minute timed rehearsal.
 
-- [ ] **12. Prepare Devpost handoff**
+- [x] **12. Prepare Devpost handoff**
   Spec ref: `prd.md > Submission Proof Points`
   What to build: Gather the public URL, repository link, exact setup/demo instructions, testing notes, AI/Codex/Claude usage, architecture summary, and screenshots of live WebMCP scope, side-by-side evidence, challenge revision, and immutable approval history.
   Acceptance: The materials prove WebMCP leverage, inspectable trust, human authority, reliability, and the unsupported-decision-to-defensible-action story; enough material exists to run `$prepare-submission` without reconstructing the build.

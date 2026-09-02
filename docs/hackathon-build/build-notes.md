@@ -362,3 +362,10 @@
 - Anh Minh confirmed the title `Research Audit Workbench`, submitter type `Individual`, country of residence `Vietnam`, and completion of the production database-password rotation.
 - Verified the public YouTube video at `https://youtu.be/bwVSzirSxCA`; its public metadata title is `Research Audit Workbench`.
 - Verified that `https://github.com/LunaDream74/research_audit_workbench` is public. The repository is still empty, with no Git refs and a reported size of zero, so checklist item 12 and the prepare stage remain open until the current main branch is pushed.
+
+## 2026-09-03 - Checklist item 12 completed
+
+- Ran a committed-file secret scan before publication; no credential, token, database password, or private environment file was found.
+- Published local `main` to `https://github.com/LunaDream74/research_audit_workbench` and verified the public branch, README, and MIT license through GitHub.
+- The Devpost draft now contains the confirmed title, individual submitter type, Vietnam residence, public application URL, public source repository, public narrated YouTube video, exact testing walkthrough, five screenshots, architecture, AI usage, Codex usage, and known limitations.
+- All checklist items are complete. The next stage is the final Devpost readiness check; no project has been sent to Devpost yet.
