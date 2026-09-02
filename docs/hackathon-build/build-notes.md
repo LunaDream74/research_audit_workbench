@@ -383,3 +383,4 @@
 - Added a sixth read-only WebMCP tool, `review_investigation_readiness`, so an external browser agent can compare progress and explain the highest-value next step without receiving durable authority.
 - Preserved the authority boundary: JARVIS cannot save a finding, confirm a challenge, save or approve a plan, or execute an experiment.
 - Added domain, adapter, browser-journey, keyboard-focus, and element-level mobile-overflow coverage. TypeScript, ESLint, 14 Vitest tests, the production build, and all three disposable-demo Playwright journeys passed locally.
+- Follow-up interface improvement: moved JARVIS into a sticky desktop side rail in both the demo and persistent workflow, with an inline responsive fallback below 1,120 pixels. A Playwright check now proves the rail stays beside the audit at a 20-pixel viewport offset while cited evidence scrolls.

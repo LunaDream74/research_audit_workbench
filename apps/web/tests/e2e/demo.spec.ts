@@ -80,3 +80,21 @@ test("JARVIS compares progress and stages only reversible next steps", async ({ 
   await expect(advisor.getByRole("button", { name: "Show required control" })).toBeVisible();
   expect(privateRequests).toEqual([]);
 });
+
+test("JARVIS stays beside the audit while the desktop workbench scrolls", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 800 });
+  await page.goto("/demo");
+
+  const rail = page.getByRole("complementary", { name: "Persistent investigation assistant" });
+  const audit = page.locator("#comparability-audit");
+  const initialRail = await rail.boundingBox();
+  const auditBox = await audit.boundingBox();
+  expect(initialRail).not.toBeNull();
+  expect(auditBox).not.toBeNull();
+  expect(initialRail!.x).toBeGreaterThan(auditBox!.x + auditBox!.width);
+
+  await page.getByRole("button", { name: "Run prepared audit" }).click();
+  await page.getByRole("button", { name: "Inspect cited evidence" }).click();
+  await page.evaluate(() => window.scrollTo({ top: document.getElementById("finding-evidence")!.offsetTop }));
+  await expect.poll(async () => Math.round((await rail.boundingBox())?.y ?? -1)).toBe(20);
+});

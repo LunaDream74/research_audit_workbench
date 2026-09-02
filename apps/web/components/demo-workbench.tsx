@@ -257,9 +257,9 @@ export function DemoWorkbench() {
         </div>
       </section>
 
+      <div className="investigation-layout">
+      <div className="investigation-main">
       <section className="question-strip"><span>Decision question</span><strong>{demoQuestion}</strong></section>
-
-      <JarvisAdvisor review={jarvisReview} onNextAction={runJarvisNextAction} />
 
       <section className="run-grid" id="run-selection" aria-label="Experiment runs">
         {demoRuns.map((run) => {
@@ -363,6 +363,11 @@ export function DemoWorkbench() {
       )}
 
       <footer className="demo-footer"><span>Disposable walkthrough</span><span>No account · no persistence · no autonomous execution</span></footer>
+      </div>
+      <aside className="jarvis-rail" aria-label="Persistent investigation assistant">
+        <JarvisAdvisor review={jarvisReview} onNextAction={runJarvisNextAction} />
+      </aside>
+      </div>
     </main>
   );
 }

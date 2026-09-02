@@ -136,7 +136,8 @@ export function PersistentInvestigation({ runs }: { runs: RunRecord[] }) {
   return (
     <div className="persistent-flow" aria-busy={busy}>
       <div className="workspace-heading"><div><p className="eyebrow">Persistent control room</p><h1>Turn evidence into a durable decision</h1></div><span className="step-chip">Human confirmation only</span></div>
-      <JarvisAdvisor review={jarvisReview} onNextAction={runJarvisNextAction} />
+      <div className="investigation-layout">
+      <div className="investigation-main">
       <section className="comparison-panel" id="persistent-finding">
         <h2>{question}</h2>
         <div className="run-preview-grid">{runs.map((run) => <article key={run.id}><strong>{run.name}</strong><span>{JSON.stringify(run.metrics)}</span></article>)}</div>
@@ -167,6 +168,11 @@ export function PersistentInvestigation({ runs }: { runs: RunRecord[] }) {
         </>}
       </section>}
       {error && <p className="auth-error" role="alert">{error}</p>}
+      </div>
+      <aside className="jarvis-rail" aria-label="Persistent investigation assistant">
+        <JarvisAdvisor review={jarvisReview} onNextAction={runJarvisNextAction} />
+      </aside>
+      </div>
     </div>
   );
 }

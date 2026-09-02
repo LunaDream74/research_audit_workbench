@@ -11,5 +11,5 @@ export default async function NewInvestigationPage() {
   const { data: runs } = await supabase.from("runs")
     .select("id, name, metrics, config, source_snapshot").order("created_at", { ascending: true }).limit(2);
   if (!runs || runs.length < 2) redirect("/workspace/imports");
-  return <main className="workspace-shell"><PersistentInvestigation runs={runs} /></main>;
+  return <main className="workspace-shell persistent-workspace-shell"><PersistentInvestigation runs={runs} /></main>;
 }

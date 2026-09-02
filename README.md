@@ -19,7 +19,7 @@ The page registers six tools through `document.modelContext.registerTool(...)`:
 
 These tools can inspect live page state and stage reversible changes. They cannot confirm an import, save a finding, persist a challenge, approve a plan, delete data, or launch an experiment. Those actions remain explicit human decisions.
 
-The JARVIS advisor uses the same deterministic readiness review in both the public demo and signed-in investigation flow. It can stage reversible work or focus the exact researcher control required next; it cannot click a durable action on the researcher's behalf.
+The JARVIS advisor uses the same deterministic readiness review in both the public demo and signed-in investigation flow. On desktop it remains visible in a sticky side rail while the researcher scrolls through the audit; on smaller screens it moves above the workflow. It can stage reversible work or focus the exact researcher control required next, but it cannot click a durable action on the researcher's behalf.
 
 Chrome without WebMCP support keeps the same manual walkthrough. A WebMCP-enabled browser exposes all six tools to its agent.
 
