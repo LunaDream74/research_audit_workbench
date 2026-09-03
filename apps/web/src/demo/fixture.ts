@@ -7,6 +7,9 @@ export type DemoRun = {
   candidateCount: number;
   manifestId: string;
   manifestHash: string;
+  evaluationSplit: string;
+  preprocessing: string;
+  metricDefinition: string;
 };
 
 export const demoQuestion = "Does this apparent improvement justify another training run?";
@@ -21,6 +24,9 @@ export const demoRuns: readonly DemoRun[] = [
     candidateCount: 200,
     manifestId: "pool-sanity-200",
     manifestHash: "sha256:run-a-manifest",
+    evaluationSplit: "test-v1",
+    preprocessing: "clip-standard-v1",
+    metricDefinition: "correct target in top 5",
   },
   {
     id: "run-b",
@@ -31,6 +37,9 @@ export const demoRuns: readonly DemoRun[] = [
     candidateCount: 1000,
     manifestId: "pool-baseline-1000",
     manifestHash: "sha256:run-b-manifest",
+    evaluationSplit: "test-v1",
+    preprocessing: "clip-standard-v1",
+    metricDefinition: "correct target in top 5",
   },
 ] as const;
 
@@ -44,4 +53,3 @@ export function selectedPairLabel(selectedIds: readonly string[]): string {
 export function recordedScore(run: DemoRun): string {
   return `${Math.round(run.metricValue * 100)}%`;
 }
-

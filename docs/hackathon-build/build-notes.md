@@ -384,3 +384,11 @@
 - Preserved the authority boundary: JARVIS cannot save a finding, confirm a challenge, save or approve a plan, or execute an experiment.
 - Added domain, adapter, browser-journey, keyboard-focus, and element-level mobile-overflow coverage. TypeScript, ESLint, 14 Vitest tests, the production build, and all three disposable-demo Playwright journeys passed locally.
 - Follow-up interface improvement: moved JARVIS into a sticky desktop side rail in both the demo and persistent workflow, with an inline responsive fallback below 1,120 pixels. A Playwright check now proves the rail stays beside the audit at a 20-pixel viewport offset while cited evidence scrolls.
+
+## 2026-09-04 - Productization source publication
+
+- Verified the replacement narrated demo at `https://youtu.be/z106dQz2FGs`: YouTube reports playable status, a 2:21 duration, and an audio stream.
+- Prepared the authenticated comparability BFF, deterministic multi-rule audit, complete audit persistence, seven-tool active registry, three-tool approved-history registry, matched reevaluation planning, and canonical Markdown/JSON decision briefs for public source publication.
+- Added the metric-definition prepared package, its downloadable ZIP, fixture-only challenge helper, clearer human-action checkpoint, approval-rationale layout correction, generated contracts, and expanded API, domain, and browser coverage.
+- Kept generated MP4, WebM, WAV, and MP3 files out of Git while retaining narration, captions, editing guidance, and reproducible browser-recording automation.
+- Verification passed: 25 Pytest tests, Ruff, 20 Vitest tests, TypeScript, ESLint, production build, idempotent OpenAPI/TypeScript generation, and all eight hosted Playwright journeys.

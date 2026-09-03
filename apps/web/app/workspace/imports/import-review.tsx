@@ -19,7 +19,7 @@ export function ImportReview() {
   const [preview, setPreview] = useState<Preview | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [confirmed, setConfirmed] = useState(false);
+  const [confirmedExperimentId, setConfirmedExperimentId] = useState("");
 
   useEffect(() => {
     const timer = window.setTimeout(() => setHydrated(true), 0);
@@ -57,7 +57,8 @@ export function ImportReview() {
       const response = await fetch("/api/imports/confirm", { method: "POST", body });
       const result = await response.json();
       if (!response.ok) setError(result.detail ?? result.error ?? "Confirmation failed");
-      else setConfirmed(true);
+      else if (typeof result.experiment_id === "string") setConfirmedExperimentId(result.experiment_id);
+      else setError("The import was confirmed but its experiment identifier was not returned.");
     } catch {
       setError("The import could not be confirmed. No records were saved.");
     } finally {
@@ -65,13 +66,14 @@ export function ImportReview() {
     }
   }
 
-  if (confirmed) {
+  if (confirmedExperimentId) {
     return (
       <section className="import-success" aria-live="polite">
         <p className="eyebrow">Import confirmed</p>
         <h2>Two runs are now durable</h2>
         <p>The reviewed snapshot, file hashes, and provenance survived as your private records.</p>
-        <Link className="primary-link" href="/workspace">Continue to investigations</Link>
+        <Link className="primary-link" href={`/workspace/investigations/new?experiment=${encodeURIComponent(confirmedExperimentId)}`}>Audit these runs</Link>
+        <Link className="secondary-link" href="/workspace">Return to workspace</Link>
       </section>
     );
   }
@@ -82,12 +84,17 @@ export function ImportReview() {
         <p className="eyebrow">Prepared package</p>
         <h1>Review before anything is saved</h1>
         <p>ZIP only, 10 MB maximum. Checkpoints, nested archives, links, and unsafe paths are rejected.</p>
+        <div className="sample-options compact">
+          <p>Trying the product? Download a sample, then select it below:</p>
+          <a download href="/research-audit-metric-definition-sample.zip"><strong>Metric-definition mismatch</strong><span>Recommended · same benchmark, deceptively similar scores</span></a>
+          <a download href="/research-audit-sample.zip"><strong>Candidate-pool mismatch</strong><span>Introductory safety-boundary example</span></a>
+        </div>
         <label className="file-picker">
           Select prepared ZIP
           <input accept=".zip,application/zip" disabled={!hydrated} onChange={(event) => {
             setFile(event.target.files?.[0] ?? null);
             setPreview(null);
-            setConfirmed(false);
+            setConfirmedExperimentId("");
           }} type="file" />
         </label>
         <button disabled={!file || busy} onClick={requestPreview} type="button">

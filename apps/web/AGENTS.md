@@ -5,6 +5,7 @@
 - Keep direct `document.modelContext` access inside `src/webmcp/adapter.ts`.
 - Never label a numerically higher score as the best model before comparability is established.
 - Use human-only controls for confirmation and approval.
+- Keep the seven-tool active registry reversible; history registers only comparison, readiness, and decision-brief reads.
 
 
 <!-- BEGIN:nextjs-agent-rules -->

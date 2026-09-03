@@ -25,7 +25,7 @@ export default async function WorkspacePage() {
       {!investigations?.length ? <div className="empty-workspace"><h2>No investigations yet</h2><p>Import records first. A recorded metric does not establish comparability on its own.</p></div> : (
         <div className="investigation-list">{investigations.map((item) => <Link href={`/workspace/investigations/${item.id}`} key={item.id}><span>{item.status}</span><strong>{item.question}</strong></Link>)}</div>
       )}
-      {!!experiments?.length && <section className="imported-experiments"><p className="eyebrow">Imported evidence</p>{experiments.map((experiment) => <article key={experiment.id}><h2>{experiment.name}</h2><div>{experiment.runs.map((run) => <span key={run.id}>{run.name}</span>)}</div></article>)}<Link className="primary-link" href="/workspace/investigations/new">Start durable investigation</Link></section>}
+      {!!experiments?.length && <section className="imported-experiments"><p className="eyebrow">Imported evidence</p>{experiments.map((experiment) => <article key={experiment.id}><h2>{experiment.name}</h2><div>{experiment.runs.map((run) => <span key={run.id}>{run.name}</span>)}</div><Link className="primary-link" href={`/workspace/investigations/new?experiment=${experiment.id}`}>Start durable investigation</Link></article>)}</section>}
     </main>
   );
 }

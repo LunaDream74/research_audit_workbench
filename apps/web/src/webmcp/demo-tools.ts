@@ -1,4 +1,3 @@
-import type { DemoRun } from "@/src/demo/fixture";
 import type { ChallengePreview, ResolutionPlan } from "@/src/domain/investigation";
 import type { JarvisReview } from "@/src/domain/jarvis-review";
 import { toolResult } from "./adapter";
@@ -9,14 +8,15 @@ export type DemoToolContext = {
     schemaVersion: "1.0";
     selectionDigest: string;
     question: string;
-    runs: readonly DemoRun[];
+    runs: readonly unknown[];
     evidenceAvailability: string;
   };
-  runAudit: (selectionDigest: string, question?: string) => Record<string, unknown>;
+  runAudit: (selectionDigest: string, question?: string) => Record<string, unknown> | Promise<Record<string, unknown>>;
   showEvidence?: (findingId: string, evidenceRefIds?: string[]) => Record<string, unknown>;
   stageChallenge?: (findingId: string, researcherContext: string) => ChallengePreview | Record<string, unknown>;
   stagePlan?: (investigationId: string, constraints?: Record<string, unknown>) => ResolutionPlan | Record<string, unknown>;
   reviewReadiness?: () => JarvisReview | Record<string, unknown>;
+  getDecisionBrief?: () => Record<string, unknown>;
 };
 
 export function buildCoreDemoTools(context: DemoToolContext): WebMCPTool[] {
@@ -52,12 +52,12 @@ export function buildCoreDemoTools(context: DemoToolContext): WebMCPTool[] {
         additionalProperties: false,
       },
       annotations: { readOnlyHint: true },
-      execute: (args) => {
+      execute: async (args) => {
         const selectionDigest = String(args.selectionDigest ?? "");
         if (selectionDigest !== context.getComparison().selectionDigest) {
           return toolResult({ schemaVersion: "1.0", error: "stale_selection", message: "The selected runs changed. Inspect the current comparison again." });
         }
-        return toolResult(context.runAudit(selectionDigest, typeof args.question === "string" ? args.question : undefined));
+        return toolResult(await context.runAudit(selectionDigest, typeof args.question === "string" ? args.question : undefined));
       },
     },
   ];
@@ -142,5 +142,20 @@ export function buildDemoTools(context: DemoToolContext): WebMCPTool[] {
         context.reviewReadiness?.() ?? { schemaVersion: "1.0", error: "review_unavailable" },
       ),
     },
+    {
+      name: "get_decision_brief",
+      title: "Get the current decision brief",
+      description: "Return the bounded canonical decision brief and rendered Markdown. This does not initiate a download or change any record.",
+      inputSchema: { type: "object", properties: {}, additionalProperties: false },
+      annotations: { readOnlyHint: true },
+      execute: () => toolResult(context.getDecisionBrief?.() ?? { schemaVersion: "1.0", error: "brief_unavailable" }),
+    },
   ];
+}
+
+export const buildInvestigationTools = buildDemoTools;
+
+export function buildHistoryTools(context: DemoToolContext): WebMCPTool[] {
+  const allowed = new Set(["get_current_comparison", "review_investigation_readiness", "get_decision_brief"]);
+  return buildDemoTools(context).filter((tool) => allowed.has(tool.name));
 }

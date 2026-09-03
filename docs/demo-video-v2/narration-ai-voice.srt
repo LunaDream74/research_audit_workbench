@@ -1,0 +1,99 @@
+1
+00:00:00,100 --> 00:00:04,921
+An ML score can improve even when the underlying comparison is not fair.
+
+2
+00:00:04,871 --> 00:00:11,915
+Research Audit Workbench helps researchers and browser agents inspect the evidence before committing more time or compute.
+
+3
+00:00:11,915 --> 00:00:14,824
+This is the real authenticated workflow.
+
+4
+00:00:14,824 --> 00:00:21,109
+I am importing the subtle prepared example: two runs from the same benchmark whose scores appear comparable.
+
+5
+00:00:21,109 --> 00:00:25,105
+The package remains temporary while the application checks it.
+
+6
+00:00:25,105 --> 00:00:34,532
+Before anything is saved, the preview reconstructs both runs, displays their metrics, inventories every source file, and computes a canonical digest.
+
+7
+00:00:34,532 --> 00:00:39,228
+Confirmation makes this exact evidence package durable and owner-scoped.
+
+8
+00:00:39,228 --> 00:00:42,932
+The imported pair now becomes an active investigation.
+
+9
+00:00:42,932 --> 00:00:50,817
+The decision question and trusted snapshots are available to both the researcher and the browser agent without copying state into a prompt.
+
+10
+00:00:50,817 --> 00:01:00,841
+Seven Web M C P tools can inspect the comparison, run the audit, focus evidence, stage a challenge or plan, review readiness, and retrieve a decision brief.
+
+11
+00:01:00,841 --> 00:01:03,761
+Deterministic code owns the findings.
+
+12
+00:01:03,761 --> 00:01:07,593
+Here the candidates, split, and preprocessing match.
+
+13
+00:01:07,593 --> 00:01:14,357
+Both scores even say N D C G at ten, but Run A is micro-averaged while Run B is macro-averaged.
+
+14
+00:01:14,357 --> 00:01:18,796
+The audit preserves both metrics and refuses an unsupported ranking.
+
+15
+00:01:18,796 --> 00:01:25,502
+The finding cites the exact configuration locations, evidence level, values, and source hashes.
+
+16
+00:01:25,502 --> 00:01:28,703
+Agent prose never becomes the source of truth.
+
+17
+00:01:28,703 --> 00:01:32,359
+Saving the audit reveals a visible human checkpoint.
+
+18
+00:01:32,359 --> 00:01:38,095
+Because this is a bundled teaching sample, Tab and Enter insert the recommended context.
+
+19
+00:01:38,095 --> 00:01:44,310
+A custom import requires the researcher's own explanation, and only the researcher can confirm it.
+
+20
+00:01:44,310 --> 00:01:51,869
+The context can revise the intended use of the result, but it cannot erase the metric-definition limitation or its citations.
+
+21
+00:01:51,869 --> 00:01:55,058
+That boundary is retained in the next revision.
+
+22
+00:01:55,058 --> 00:01:58,995
+Run A is prefilled to Run B's evaluation protocol.
+
+23
+00:01:58,995 --> 00:02:08,925
+Whole-audit validation checks the plan, an operational batch-size change receives a new digest, and the editable rationale binds human approval to that exact version.
+
+24
+00:02:08,925 --> 00:02:12,056
+The final record is authoritative and durable.
+
+25
+00:02:12,056 --> 00:02:18,563
+Web M C P can inspect and stage work, but it cannot save, approve, delete, or execute.

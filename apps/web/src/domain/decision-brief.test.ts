@@ -1,0 +1,7 @@
+import { describe, expect, it } from "vitest";
+import { createDecisionBrief, renderDecisionBriefJson, renderDecisionBriefMarkdown } from "./decision-brief";
+const input = { question: "Q?", comparisonDigest: "digest", runs: [{ id: "a", name: "A", metric_name: "Recall@5", metric_value: 0.8, declared_candidate_count: 10, recorded_candidate_count: 10, evaluation_split: "test", preprocessing: "v1", metric_definition: "top 5", recorded_evaluation_split: null, recorded_preprocessing: null, recorded_metric_definition: null, source_hashes: {} }], audit: { schema_version: "1.0" as const, selection_digest: "digest", metrics: [], stages: [], findings: [], evidence_refs: [], confidence: "high" as const, limitations: [] } };
+describe("decision brief", () => {
+  it("renders deterministic draft watermarks from one canonical model", () => { const brief = createDecisionBrief(input); expect(renderDecisionBriefMarkdown(brief)).toContain("DRAFT — NOT APPROVED"); expect(JSON.parse(renderDecisionBriefJson(brief)).watermark).toBe("DRAFT — NOT APPROVED"); expect(renderDecisionBriefJson(brief)).toBe(renderDecisionBriefJson(brief)); });
+  it("binds approved output to its exact plan digest", () => { const brief = createDecisionBrief({ ...input, binding: { version: 2, digest: "plan-digest" }, approval: { status: "approved", approvedAt: "2026-09-03T00:00:00Z", rationale: "matched", approvedBy: "user" } }); expect(brief.watermark).toBe("AUTHORITATIVE"); expect(renderDecisionBriefMarkdown(brief)).toContain("plan-digest"); });
+});

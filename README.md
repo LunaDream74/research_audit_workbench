@@ -8,7 +8,7 @@ The prepared walkthrough compares a run with 84% Recall@5 against a baseline wit
 
 ## What WebMCP does
 
-The page registers six tools through `document.modelContext.registerTool(...)`:
+Active investigations register seven tools through `document.modelContext.registerTool(...)`:
 
 - `get_current_comparison` reads the selected runs, decision question, and evidence availability.
 - `run_comparability_audit` starts a deterministic audit for the current selection.
@@ -16,12 +16,13 @@ The page registers six tools through `document.modelContext.registerTool(...)`:
 - `stage_challenge_revision` previews a revised interpretation with the factual limitation retained.
 - `stage_resolution_plan` previews a matched reevaluation plan.
 - `review_investigation_readiness` compares live evidence, interpretation, and plan state, scores decision readiness, and ranks the next improvements.
+- `get_decision_brief` returns the canonical brief plus rendered Markdown without initiating a download.
 
 These tools can inspect live page state and stage reversible changes. They cannot confirm an import, save a finding, persist a challenge, approve a plan, delete data, or launch an experiment. Those actions remain explicit human decisions.
 
 The JARVIS advisor uses the same deterministic readiness review in both the public demo and signed-in investigation flow. On desktop it remains visible in a sticky side rail while the researcher scrolls through the audit; on smaller screens it moves above the workflow. It can stage reversible work or focus the exact researcher control required next, but it cannot click a durable action on the researcher's behalf.
 
-Chrome without WebMCP support keeps the same manual walkthrough. A WebMCP-enabled browser exposes all six tools to its agent.
+Approved history exposes only comparison inspection, readiness review, and decision-brief retrieval. Chrome without WebMCP support keeps the same manual walkthrough.
 
 ## Architecture
 
@@ -81,7 +82,7 @@ The deployed P0 was also exercised through public signup, prepared import, audit
 
 ## Current limits
 
-- Candidate-pool mismatch is the deepest audit rule in this submission.
+- Audits cover candidate pools, evaluation splits, preprocessing, metric definitions, missing evidence, and source conflicts.
 - Full-fidelity import supports the documented prepared retrieval package rather than arbitrary experiment folders.
 - The product approves a plan but does not execute training or evaluation jobs.
 - WebMCP is experimental, so the adapter feature-detects support and preserves a manual path.

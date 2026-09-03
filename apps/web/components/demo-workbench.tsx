@@ -138,6 +138,17 @@ export function DemoWorkbench() {
           return stagePlan();
         },
         reviewReadiness: () => jarvisReview,
+        getDecisionBrief: () => auditState === "complete" ? {
+          brief: {
+            schemaVersion: "1.0", status: approval ? "approved" : "draft",
+            watermark: approval ? "AUTHORITATIVE" : "DRAFT — NOT APPROVED",
+            comparisonDigest: selectionDigest, question: demoQuestion,
+            runs: demoRuns.filter((run) => selected.includes(run.id)),
+            findings: [{ id: "candidate-pool-mismatch", severity: "critical", evidenceRefIds: ["run-a:manifest:candidate-count", "run-b:manifest:candidate-count"] }],
+            humanAuthorityStatement: "A researcher approves the exact plan; no experiment is executed automatically.",
+          },
+          markdown: `# Research audit decision brief\n\n> ${approval ? "AUTHORITATIVE" : "DRAFT — NOT APPROVED"}\n\n${demoQuestion}`,
+        } : { error: "audit_required" },
       }),
     );
     registration.ready.then(
@@ -148,7 +159,7 @@ export function DemoWorkbench() {
       active = false;
       registration.abort();
     };
-  }, [challengeConfirmed, investigationSaved, jarvisReview, openEvidence, revealAudit, selected, selectionDigest, stageChallenge, stagePlan]);
+  }, [approval, auditState, challengeConfirmed, investigationSaved, jarvisReview, openEvidence, revealAudit, selected, selectionDigest, stageChallenge, stagePlan]);
 
   useEffect(() => {
     let active = true;
@@ -239,7 +250,7 @@ export function DemoWorkbench() {
         </div>
         <div className="header-badges">
           <div className={`mcp-badge ${webMCPStatus}`}>
-            {webMCPStatus === "native" ? "WebMCP · 6 tools live" : "WebMCP · manual fallback"}
+            {webMCPStatus === "native" ? "WebMCP · 7 tools live" : "WebMCP · manual fallback"}
           </div>
           <div className="demo-badge"><span /> Demo data · nothing is saved</div>
         </div>
@@ -288,7 +299,7 @@ export function DemoWorkbench() {
 
         {auditState === "idle" ? (
           <div className="audit-empty"><div className="scan-lines" aria-hidden="true" /><p>The higher recorded score is visible. Whether it establishes a better model is still unchecked.</p></div>
-        ) : (
+        ) : (<>
           <div className="finding" role="status">
             <div className="finding-icon" aria-hidden="true">!</div>
             <div className="finding-body">
@@ -301,7 +312,13 @@ export function DemoWorkbench() {
               <p className="limitation">This evidence illustrates why the evaluations differ. It does not quantify how much of the eight-point gap the mismatch caused.</p>
             </div>
           </div>
-        )}
+          <div className="evidence-grid" aria-label="Four-condition audit matrix">
+            <div><span>Candidate pool</span><strong>Mismatch · blocker</strong><small>200 vs 1,000</small></div>
+            <div><span>Evaluation split</span><strong>Matched</strong><small>test-v1</small></div>
+            <div><span>Preprocessing</span><strong>Matched</strong><small>clip-standard-v1</small></div>
+            <div><span>Metric definition</span><strong>Matched</strong><small>correct target in top 5</small></div>
+          </div>
+        </>)}
       </section>
 
       {evidenceOpen && (
@@ -342,7 +359,7 @@ export function DemoWorkbench() {
                 <label>Run A candidate pool<input aria-label="Run A candidate pool" disabled={!!approval} min="1" onChange={(event) => updatePlan("candidatePoolA", Number(event.target.value))} type="number" value={plan.candidatePoolA} /></label>
                 <label>Run B candidate pool<input aria-label="Run B candidate pool" disabled={!!approval} min="1" onChange={(event) => updatePlan("candidatePoolB", Number(event.target.value))} type="number" value={plan.candidatePoolB} /></label>
                 <label>Batch size<input aria-label="Batch size" disabled={!!approval} min="1" onChange={(event) => updatePlan("batchSize", Number(event.target.value))} type="number" value={plan.batchSize} /></label>
-                <label>Evaluation split<input aria-label="Evaluation split" readOnly value={plan.evaluationSplit} /></label>
+                <label>Evaluation split<input aria-label="Evaluation split" readOnly value={plan.evaluationSplitA} /></label>
               </div>
               {planValidation?.informationalWarnings.map((warning) => <p className="info-note" key={warning}>{warning}</p>)}
               {planValidation?.limitations.map((warning) => <div className="warning-note" key={warning}><strong>Decision-relevant limitation</strong><p>{warning}</p><label><input checked={limitationAccepted} onChange={(event) => setLimitationAccepted(event.target.checked)} type="checkbox" /> I acknowledge this exact consequence.</label></div>)}

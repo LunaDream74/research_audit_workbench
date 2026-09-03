@@ -1,0 +1,39 @@
+1
+00:00:00,000 --> 00:00:12,000
+An ML score can improve even when the underlying comparison is not fair. Research Audit Workbench helps researchers and browser agents inspect the evidence before committing more time or compute.
+
+2
+00:00:12,000 --> 00:00:25,000
+This is the real authenticated workflow. I am importing the subtle prepared example: two runs from the same benchmark whose scores appear comparable. The package remains temporary while the application checks it.
+
+3
+00:00:25,000 --> 00:00:40,000
+Before anything is saved, the preview reconstructs both runs, displays their metrics, inventories every source file, and computes a canonical digest. Confirmation makes this exact evidence package durable and owner-scoped.
+
+4
+00:00:40,000 --> 00:00:55,000
+The imported pair now becomes an active investigation. The decision question and trusted snapshots are available to both the researcher and the browser agent without copying state into a prompt.
+
+5
+00:00:55,000 --> 00:01:18,000
+Seven WebMCP tools can inspect the comparison, run the audit, focus evidence, stage a challenge or plan, review readiness, and retrieve a decision brief. Deterministic code owns the findings. Here the candidates, split, and preprocessing match. Both scores even say nDCG at ten, but Run A is micro-averaged while Run B is macro-averaged. The audit preserves both metrics and refuses an unsupported ranking.
+
+6
+00:01:18,000 --> 00:01:30,000
+The finding cites the exact configuration locations, evidence level, values, and source hashes. Agent prose never becomes the source of truth.
+
+7
+00:01:30,000 --> 00:01:48,000
+Saving the audit reveals a visible human checkpoint. Because this is a bundled teaching sample, Tab and Enter insert the recommended context. A custom import requires the researcher's own explanation, and only the researcher can confirm it.
+
+8
+00:01:48,000 --> 00:02:00,000
+The context can revise the intended use of the result, but it cannot erase the metric-definition limitation or its citations. That boundary is retained in the next revision.
+
+9
+00:02:00,000 --> 00:02:14,000
+Run A is prefilled to Run B's evaluation protocol. Whole-audit validation checks the plan, an operational batch-size change receives a new digest, and the editable rationale binds human approval to that exact version.
+
+10
+00:02:14,000 --> 00:02:20,000
+The final record is authoritative and durable. WebMCP can inspect and stage work, but it cannot save, approve, delete, or execute.

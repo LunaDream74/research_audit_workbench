@@ -22,6 +22,9 @@ class RunSnapshot(BaseModel):
     evaluation_split: str | None = None
     preprocessing: str | None = None
     metric_definition: str | None = None
+    recorded_evaluation_split: str | None = None
+    recorded_preprocessing: str | None = None
+    recorded_metric_definition: str | None = None
     source_hashes: dict[str, str] = Field(default_factory=dict)
 
 
@@ -47,7 +50,15 @@ class EvidenceRef(BaseModel):
 
 class Finding(BaseModel):
     id: str
-    kind: Literal["candidate_pool_mismatch", "source_inconsistency", "comparable_candidate_pool"]
+    kind: Literal[
+        "candidate_pool_mismatch",
+        "evaluation_split_mismatch",
+        "preprocessing_mismatch",
+        "metric_definition_mismatch",
+        "missing_evidence",
+        "matched_condition",
+        "source_conflict",
+    ]
     severity: Literal["info", "warning", "critical"]
     title: str
     summary: str
@@ -117,4 +128,3 @@ class PlanValidationResult(BaseModel):
     blocking_errors: list[str]
     limitations: list[str]
     informational_warnings: list[str]
-

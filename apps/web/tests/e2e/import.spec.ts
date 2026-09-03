@@ -26,7 +26,7 @@ test("a researcher reviews, confirms, and privately returns to a prepared import
   await expect(page.getByText("Preview is stateless", { exact: false })).toBeVisible();
   await page.getByRole("button", { name: "Confirm reviewed import" }).click();
   await expect(page.getByRole("heading", { name: "Two runs are now durable" })).toBeVisible();
-  await page.getByRole("link", { name: "Continue to investigations" }).click();
+  await page.getByRole("link", { name: "Return to workspace" }).click();
   await expect(page.getByText("Rain retrieval comparison")).toBeVisible();
   await expect(page.getByText("Run A")).toBeVisible();
   await expect(page.getByText("Run B")).toBeVisible();
@@ -35,7 +35,7 @@ test("a researcher reviews, confirms, and privately returns to a prepared import
   const returning = await browser.newContext();
   const returningPage = await returning.newPage();
   await returningPage.goto("/workspace");
-  await expect(returningPage).toHaveURL(/\/login$/);
+  await expect(returningPage).toHaveURL(/\/login\?next=%2Fworkspace$/);
   await returningPage.getByLabel("Email").fill(email);
   await returningPage.getByLabel("Password").fill(password);
   await returningPage.getByRole("button", { name: "Sign in" }).click();

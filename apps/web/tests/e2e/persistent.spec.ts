@@ -1,47 +1,17 @@
 import { expect, test } from "@playwright/test";
 import { preparedPackageZip } from "./zip-fixture";
-
-test("a researcher saves, challenges, approves, and reloads an exact decision", async ({ page }) => {
-  test.setTimeout(60_000);
-  const email = `decision-${Date.now()}@example.test`;
-  const password = "evidence-first-123";
-
-  await page.goto("/login");
-  await page.getByLabel("Email").fill(email);
-  await page.getByLabel("Password").fill(password);
-  await page.getByRole("button", { name: "Create account" }).click();
-  await expect(page).toHaveURL(/\/workspace$/);
-
-  await page.goto("/workspace/imports");
-  await page.getByLabel("Select prepared ZIP").setInputFiles({
-    name: "prepared-retrieval.zip",
-    mimeType: "application/zip",
-    buffer: preparedPackageZip(),
-  });
-  await page.getByRole("button", { name: "Create review" }).click();
-  await expect(page.getByRole("heading", { name: "Rain retrieval comparison" })).toBeVisible();
-  await page.getByRole("button", { name: "Confirm reviewed import" }).click();
-  await page.getByRole("link", { name: "Continue to investigations" }).click();
-  await page.getByRole("link", { name: "Start durable investigation" }).click();
-
-  await page.getByRole("button", { name: "Save finding and create investigation" }).click();
-  await expect(page.getByText("Finding confirmed · revision 1")).toBeVisible();
-  await page.getByRole("button", { name: "Preview revised interpretation" }).click();
-  await expect(page.getByText("Valid sanity-check result; unsuitable for direct baseline comparison.")).toBeVisible();
-  await page.getByRole("button", { name: "Confirm challenge and revision" }).click();
-  await expect(page.getByRole("heading", { name: "Approve only the exact matched reevaluation" })).toBeVisible();
-
-  await page.getByLabel("Batch size").fill("16");
-  await page.getByRole("button", { name: "Save validated draft" }).click();
-  await expect(page.getByText("Batch size changed for operational fit", { exact: false })).toBeVisible();
-  await expect(page.locator(".digest-line code")).toHaveText(/^[a-f0-9]{64}$/);
-  await page.getByRole("button", { name: "Approve exact plan" }).click();
-
-  await expect(page).toHaveURL(/\/workspace\/investigations\/[0-9a-f-]+$/);
-  await expect(page.getByRole("heading", { name: "Plan v1 · approved" })).toBeVisible();
-  await expect(page.getByText("plan_approved")).toBeVisible();
-  await page.screenshot({ path: "../../test-results/persistent-checkpoint.png", fullPage: true });
-  await page.reload();
-  await expect(page.getByRole("heading", { name: "Plan v1 · approved" })).toBeVisible();
-  await expect(page.getByText("No audit, agent action, or experiment execution resumes automatically.")).toBeVisible();
+test("a researcher audits, saves the whole package, exports, approves, and reloads", async ({ page }) => {
+  test.setTimeout(60_000); const email = `decision-${Date.now()}@example.test`; const password = "evidence-first-123";
+  await page.goto("/login"); await page.getByLabel("Email").fill(email); await page.getByLabel("Password").fill(password); await page.getByRole("button", { name: "Create account" }).click(); await expect(page).toHaveURL(/\/workspace$/);
+  await page.goto("/workspace/imports"); await page.getByLabel("Select prepared ZIP").setInputFiles({ name: "prepared-retrieval.zip", mimeType: "application/zip", buffer: preparedPackageZip() }); await page.getByRole("button", { name: "Create review" }).click(); await expect(page.getByRole("heading", { name: "Rain retrieval comparison" })).toBeVisible(); await page.getByRole("button", { name: "Confirm reviewed import" }).click(); await page.getByRole("link", { name: "Audit these runs" }).click();
+  await page.getByRole("button", { name: "Run comparability audit" }).click(); await expect(page.getByText("Temporary audit", { exact: false })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Evaluation split matches" })).toBeVisible(); await expect(page.getByRole("heading", { name: "Preprocessing matches" })).toBeVisible(); await expect(page.getByRole("heading", { name: "Metric definition matches" })).toBeVisible();
+  await page.getByRole("button", { name: /Inspect .* cited sources/ }).first().click(); await page.getByRole("button", { name: "Save complete audit and create investigation" }).click(); await expect(page.getByText("Audit package saved · revision 1")).toBeVisible();
+  await expect(page.getByText("Action required")).toBeVisible(); await expect(page.getByLabel("Researcher context")).toBeFocused(); await expect(page.getByLabel("Researcher context")).toHaveValue(""); await expect(page.getByRole("button", { name: "Preview my revised interpretation" })).toBeDisabled(); await expect(page.getByText("Prepared sample helper")).toBeVisible(); await page.getByRole("button", { name: "Use this sample context" }).click(); await expect(page.getByLabel("Researcher context")).toHaveValue(/intentional sanity check/);
+  await page.getByRole("button", { name: "Preview my revised interpretation" }).click(); await expect(page.getByText("Valid sanity-check result; unsuitable for direct baseline comparison.")).toBeVisible(); await page.getByRole("button", { name: "Confirm challenge and revision" }).click(); await expect(page.getByRole("heading", { name: "Run A is prefilled to the Run B baseline" })).toBeVisible();
+  await page.getByLabel("Batch size").fill("16"); await page.getByRole("button", { name: "Save validated draft" }).click(); await expect(page.getByText("Batch size changed for operational fit", { exact: false })).toBeVisible(); await expect(page.locator(".digest-line code")).toHaveText(/^[a-f0-9]{64}$/); const rationaleWidth = await page.getByLabel("Approval rationale").evaluate((element) => element.clientWidth / (element.parentElement?.clientWidth || 1)); expect(rationaleWidth).toBeGreaterThan(0.95); await expect(page.getByLabel("Approval rationale")).toHaveValue("This matched reevaluation resolves the decision-relevant mismatches without additional training.");
+  const markdown = page.waitForEvent("download"); await page.getByRole("button", { name: "Download Markdown" }).click(); expect((await markdown).suggestedFilename()).toBe("research-audit-draft.md"); const json = page.waitForEvent("download"); await page.getByRole("button", { name: "Download JSON" }).click(); expect((await json).suggestedFilename()).toBe("research-audit-draft.json");
+  await page.getByRole("button", { name: "Approve exact plan" }).click(); await expect(page).toHaveURL(/\/workspace\/investigations\/[0-9a-f-]+$/); await expect(page.getByRole("heading", { name: "Plan v1 · approved" })).toBeVisible(); await expect(page.getByText("AUTHORITATIVE · bound to plan v1")).toBeVisible(); await expect(page.getByText("plan_approved")).toBeVisible();
+  const approvedMarkdown = page.waitForEvent("download"); await page.getByRole("button", { name: "Download Markdown" }).click(); expect((await approvedMarkdown).suggestedFilename()).toBe("research-audit-plan-v1.md"); const approvedJson = page.waitForEvent("download"); await page.getByRole("button", { name: "Download JSON" }).click(); expect((await approvedJson).suggestedFilename()).toBe("research-audit-plan-v1.json");
+  await page.reload(); await expect(page.getByRole("heading", { name: "Plan v1 · approved" })).toBeVisible(); await expect(page.getByText("No audit, agent action, or experiment execution resumes automatically.")).toBeVisible();
 });

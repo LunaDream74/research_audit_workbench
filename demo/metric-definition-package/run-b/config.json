@@ -1,0 +1,1 @@
+{"evaluation": {"candidate_count": 1000, "split": "evaluation-v2", "preprocessing": "embedding-l2-v1", "metric": "nDCG@10", "metric_definition": "nDCG@10 macro-averaged across query cohorts"}}

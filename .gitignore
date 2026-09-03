@@ -16,3 +16,9 @@ __pycache__/
 .vercel/
 .deployment-backups/
 .deployment-staging/
+
+# Generated demo media is published through YouTube, not Git.
+docs/demo-video-v2/*.mp4
+docs/demo-video-v2/*.webm
+docs/demo-video-v2/*.wav
+docs/demo-video-v2/*.mp3

@@ -24,18 +24,21 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   if (validation.blockingErrors.length || digest !== stored.digest) {
     return NextResponse.json({ error: "server_revalidation_failed", validation }, { status: 409 });
   }
-  const limitation = validation.limitations[0] ?? null;
-  if (limitation && body.acknowledgedLimitation !== limitation) {
-    return NextResponse.json({ error: "specific_limitation_acknowledgment_required", limitation }, { status: 422 });
+  const limitations = validation.limitations;
+  const acknowledged = Array.isArray(body.acknowledgedLimitations)
+    ? body.acknowledgedLimitations
+    : body.acknowledgedLimitation ? [body.acknowledgedLimitation] : [];
+  if (limitations.length && (acknowledged.length !== limitations.length || limitations.some((item, index) => acknowledged[index] !== item))) {
+    return NextResponse.json({ error: "specific_limitation_acknowledgment_required", limitations }, { status: 422 });
   }
-  const approvalStatus = limitation ? "approved_with_limitation" : "approved";
+  const approvalStatus = limitations.length ? "approved_with_limitation" : "approved";
   const { data, error } = await supabase.rpc("approve_investigation_plan", {
     target_investigation: id,
     expected_version: version,
     expected_digest: digest,
     approval_status: approvalStatus,
     approval_rationale: body.rationale,
-    acknowledged_limitation: limitation,
+    acknowledged_limitation: limitations.length ? limitations.join("\n") : null,
   });
   if (error) {
     const stale = error.message.includes("stale plan version or digest");

@@ -1,0 +1,5 @@
+{
+  "schema_version": "1.0",
+  "experiment": "Ranking aggregation comparison",
+  "runs": ["run-a", "run-b"]
+}

@@ -28,7 +28,7 @@ That authority boundary makes WebMCP useful here. The agent can work with the pa
 
 ## How We Used AI
 
-The runtime collaboration happens through an external browser agent using WebMCP. The page registers six tools:
+The runtime collaboration happens through an external browser agent using WebMCP. Active investigations register seven tools:
 
 - `get_current_comparison`
 - `run_comparability_audit`
@@ -36,8 +36,9 @@ The runtime collaboration happens through an external browser agent using WebMCP
 - `stage_challenge_revision`
 - `stage_resolution_plan`
 - `review_investigation_readiness`
+- `get_decision_brief`
 
-The sixth tool powers a JARVIS-style readiness critic that compares the live investigation against a defensible decision path, scores progress, and ranks the next improvements. The same advisor appears in the disposable demo and persistent workspace. It may stage reversible work and focus the required human control, but it cannot save, confirm, approve, or execute.
+The final two tools power a JARVIS-style readiness critic and retrieve a deterministic Markdown/JSON decision brief. Approved history exposes only three read-only tools. None can save, confirm, approve, download, or execute.
 
 The agent uses those tools to inspect the live pair and prepare reversible work. It does not generate the factual audit. Pure Python rules compare the normalized run snapshots, prefer recorded manifests over declared configuration, produce bounded citations, and avoid attributing any share of the eight-point score gap to the mismatch.
 
@@ -49,12 +50,13 @@ Codex helped turn the initial "researcher with JARVIS" idea into a focused produ
 
 During implementation, Codex used test failures and live browser checks to fix WebMCP registration timing, hydration races, authentication boundaries, ZIP parser protections, CORS, public environment configuration, and exact approval persistence. Folder-level `AGENTS.md` and `CLAUDE.md` files keep Codex and Claude Code on the same authority rules: deterministic code owns facts, the API is stateless, Next.js owns durable writes, and WebMCP may stage but never approve.
 
-The final verification included 22 Pytest tests, Ruff, TypeScript, ESLint, 9 Vitest tests, a production build, 26 pgTAP assertions, generated contract drift checks, and five public Playwright journeys. The deployed browser suite covered signup, prepared import, audit, evidence, challenge, exact approval, reload, resume, the disposable demo, mobile layout, and keyboard focus.
+The current verification includes 25 Pytest tests, Ruff, TypeScript, ESLint, 18 Vitest tests, a production build, deterministic contract generation, and four passing hosted public Playwright journeys. The expanded authenticated import-to-brief journey is checked in; its hosted run currently stops at signup because production email confirmation returns no immediate session.
 
 ## Key Features
 
-- Six live, selection-scoped WebMCP tools behind one feature-detected adapter
-- Deterministic candidate-pool audit with cautious language and recorded evidence priority
+- Seven live, selection-scoped WebMCP tools behind one feature-detected adapter
+- Deterministic multi-rule audit with cautious language and recorded evidence priority
+- Canonical draft and authoritative approved decision briefs in Markdown and JSON
 - Side-by-side manifests with JSON locations, values, and source hashes
 - Researcher challenge flow that can revise an interpretation without erasing the limitation
 - Versioned plan validation and approval bound to a server-computed SHA-256 digest
@@ -97,9 +99,11 @@ The public repository contains the complete source, setup instructions, prepared
 
 ## Demo Video
 
-https://youtu.be/bwVSzirSxCA
+https://youtu.be/z106dQz2FGs
 
-The public video is titled `Research Audit Workbench`. A matching timed 1:44 script is available in `docs/demo-video-script.md`.
+The public video is titled `Research Audit Workbench`. The replacement demo runs 2:21 and documents the authenticated import, seven-tool WebMCP investigation, metric-definition blocker, human challenge, exact plan approval, and authoritative decision brief. Its narration and editing materials are available in `docs/demo-video-v2/`.
+
+Generated video and audio binaries are intentionally excluded from Git; YouTube hosts the final rendered submission video.
 
 ## Screenshot Shot List
 
@@ -124,7 +128,7 @@ The public video is titled `Research Audit Workbench`. A matching timed 1:44 scr
 
 ## Known Limitations
 
-- Candidate-pool mismatch is the deepest implemented audit rule. Broader evaluation-split, preprocessing, and metric-definition coverage is future work.
+- Audits cover candidate pools, evaluation splits, preprocessing, metric definitions, missing evidence, and source conflicts.
 - Full-fidelity import supports the documented prepared retrieval ZIP rather than arbitrary experiment folders.
 - The product validates and approves a next-run plan but does not execute experiments.
 - WebMCP is experimental. The adapter feature-detects support, aborts stale registrations, and preserves a manual workflow.
@@ -140,7 +144,7 @@ The public video is titled `Research Audit Workbench`. A matching timed 1:44 scr
 - Live URL: `https://webmcp-research-auditor.vercel.app/demo`
 - Testing instructions: use the eight-step walkthrough above; no credentials required
 - Public code repository: `https://github.com/LunaDream74/research_audit_workbench`
-- Agent/client testing: `Chrome 151 with experimental web platform features for native five-tool invocation; standard Chrome for manual fallback; mocked document.modelContext for adapter unit tests`
+- Agent/client testing: `Chrome with experimental WebMCP support for native seven-tool invocation; standard Chrome for manual fallback; mocked document.modelContext for adapter unit tests`
 - AI tools used during development: `Codex and Claude Code`
 - Learning derived: `Significant`
 - Career-reusable AI value: `Yes`

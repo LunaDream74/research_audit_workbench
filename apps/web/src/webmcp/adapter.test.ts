@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { registerWebMCPTools } from "./adapter";
-import { buildCoreDemoTools, buildDemoTools } from "./demo-tools";
+import { buildCoreDemoTools, buildDemoTools, buildHistoryTools } from "./demo-tools";
 import type { ModelContext, WebMCPTool } from "./types";
 
 function toolContext() {
@@ -49,7 +49,7 @@ describe("WebMCP adapter", () => {
     expect(result.structuredContent.error).toBe("stale_selection");
   });
 
-  it("exposes six tools while keeping every agent action reversible", () => {
+  it("exposes seven active tools and three history tools while keeping agent actions reversible", () => {
     const tools = buildDemoTools({
       ...toolContext(),
       showEvidence: vi.fn(() => ({ schemaVersion: "1.0", opened: true })),
@@ -64,8 +64,12 @@ describe("WebMCP adapter", () => {
       "stage_challenge_revision",
       "stage_resolution_plan",
       "review_investigation_readiness",
+      "get_decision_brief",
     ]);
     expect(tools.map((tool) => tool.name).join(" ")).not.toMatch(/approve|confirm|save|delete|execute_experiment/);
+    expect(buildHistoryTools(toolContext()).map((tool) => tool.name)).toEqual([
+      "get_current_comparison", "review_investigation_readiness", "get_decision_brief",
+    ]);
   });
 
   it("returns a read-only JARVIS review of the live workflow", async () => {

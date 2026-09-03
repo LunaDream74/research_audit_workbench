@@ -1,0 +1,22 @@
+"use client";
+import { useEffect, useMemo } from "react";
+import { trustedRunSnapshot, type AuditResult } from "@/src/domain/audit";
+import { createDecisionBrief, renderDecisionBriefJson, renderDecisionBriefMarkdown } from "@/src/domain/decision-brief";
+import { type ChallengePreview, type ResolutionPlan, validatePlan } from "@/src/domain/investigation";
+import { reviewInvestigation } from "@/src/domain/jarvis-review";
+import { registerWebMCPTools } from "@/src/webmcp/adapter";
+import { buildHistoryTools } from "@/src/webmcp/investigation-tools";
+type Props = { question: string; runs: Array<{ id: string; name: string; metrics: unknown; config: unknown; source_snapshot: unknown }>; revision: { selection_digest: string; result: unknown; finding_snapshot: unknown }; plan: { version: number; status: string; body: unknown; warnings: unknown; digest: string; rationale: string | null; approved_at: string | null; approved_by: string | null } };
+function download(name: string, content: string, type: string) { const url = URL.createObjectURL(new Blob([content], { type })); const anchor = document.createElement("a"); anchor.href = url; anchor.download = name; anchor.click(); URL.revokeObjectURL(url); }
+export function ApprovedInvestigation({ question, runs, revision, plan }: Props) {
+  const snapshots = useMemo(() => runs.map(trustedRunSnapshot), [runs]);
+  const resolutionPlan = plan.body as ResolutionPlan;
+  const validation = useMemo(() => validatePlan(resolutionPlan), [resolutionPlan]);
+  const findingSnapshot = useMemo(() => revision.finding_snapshot && typeof revision.finding_snapshot === "object" ? revision.finding_snapshot as Record<string, unknown> : {}, [revision.finding_snapshot]);
+  const audit = useMemo<AuditResult>(() => { const raw = revision.result && typeof revision.result === "object" ? revision.result as Partial<AuditResult> : {}; return { schema_version: "1.0", selection_digest: revision.selection_digest, metrics: raw.metrics ?? [], stages: raw.stages ?? [], findings: raw.findings ?? [], evidence_refs: raw.evidence_refs ?? [], confidence: raw.confidence ?? "low", limitations: raw.limitations ?? ["This legacy investigation predates the complete audit package."] }; }, [revision.result, revision.selection_digest]);
+  const brief = useMemo(() => createDecisionBrief({ question, comparisonDigest: revision.selection_digest, runs: snapshots, audit, challenge: (findingSnapshot.challenge as ChallengePreview | undefined) ?? null, plan: resolutionPlan, validation, binding: { version: plan.version, digest: plan.digest }, approval: { status: plan.status, approvedAt: plan.approved_at ?? "unknown", rationale: plan.rationale ?? "", approvedBy: plan.approved_by, acknowledgedLimitations: validation.limitations } }), [audit, findingSnapshot.challenge, plan.approved_at, plan.approved_by, plan.digest, plan.rationale, plan.status, plan.version, question, resolutionPlan, revision.selection_digest, snapshots, validation]);
+  const readiness = useMemo(() => reviewInvestigation({ pairReady: true, auditComplete: true, evidenceInspected: true, findingSaved: true, challengePreviewed: true, challengeConfirmed: true, planDrafted: true, planValidation: validation, digestReady: true, approved: true }), [validation]);
+  useEffect(() => { const registration = registerWebMCPTools(buildHistoryTools({ getComparison: () => ({ schemaVersion: "1.0", selectionDigest: revision.selection_digest, question, runs: snapshots, evidenceAvailability: "Approved investigation record" }), runAudit: () => ({ error: "history_is_read_only" }), reviewReadiness: () => readiness, getDecisionBrief: () => ({ brief, markdown: renderDecisionBriefMarkdown(brief) }) as unknown as Record<string, unknown> })); return () => registration.abort(); }, [brief, question, readiness, revision.selection_digest, snapshots]);
+  const base = `research-audit-plan-v${plan.version}`;
+  return <section className="jarvis-panel"><p className="eyebrow">Authoritative decision brief</p><strong>AUTHORITATIVE · bound to plan v{plan.version}</strong><p>The Markdown and JSON are generated from the same canonical record.</p><button className="secondary-button" onClick={() => download(`${base}.md`, renderDecisionBriefMarkdown(brief), "text/markdown")}>Download Markdown</button><button className="secondary-button" onClick={() => download(`${base}.json`, renderDecisionBriefJson(brief), "application/json")}>Download JSON</button></section>;
+}

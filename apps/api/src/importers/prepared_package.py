@@ -123,7 +123,8 @@ def _run_snapshot(run_id: str, files: dict[str, bytes], hashes: dict[str, str]) 
             declared_candidate_count=evaluation.get("candidate_count"),
             recorded_candidate_count=manifest.get("candidate_count"),
             evaluation_split=evaluation.get("split"),
-            metric_definition=evaluation.get("metric"),
+            preprocessing=evaluation.get("preprocessing"),
+            metric_definition=evaluation.get("metric_definition") or evaluation.get("metric"),
             source_hashes={
                 "config": hashes[f"{run_id}/config.json"],
                 "metrics": hashes[f"{run_id}/metrics.json"],

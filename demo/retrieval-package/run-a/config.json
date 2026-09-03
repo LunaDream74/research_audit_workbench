@@ -1,2 +1,1 @@
-{"evaluation": {"candidate_count": 200, "split": "test-v1", "metric": "Recall@5"}}
-
+{"evaluation": {"candidate_count": 200, "split": "test-v1", "preprocessing": "clip-standard-v1", "metric": "Recall@5", "metric_definition": "correct target in top 5"}}

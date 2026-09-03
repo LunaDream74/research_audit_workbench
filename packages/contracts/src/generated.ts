@@ -157,7 +157,7 @@ export interface components {
              * Kind
              * @enum {string}
              */
-            kind: "candidate_pool_mismatch" | "source_inconsistency" | "comparable_candidate_pool";
+            kind: "candidate_pool_mismatch" | "evaluation_split_mismatch" | "preprocessing_mismatch" | "metric_definition_mismatch" | "missing_evidence" | "matched_condition" | "source_conflict";
             /**
              * Severity
              * @enum {string}
@@ -241,6 +241,12 @@ export interface components {
             preprocessing?: string | null;
             /** Recorded Candidate Count */
             recorded_candidate_count?: number | null;
+            /** Recorded Evaluation Split */
+            recorded_evaluation_split?: string | null;
+            /** Recorded Metric Definition */
+            recorded_metric_definition?: string | null;
+            /** Recorded Preprocessing */
+            recorded_preprocessing?: string | null;
             /** Source Hashes */
             source_hashes?: {
                 [key: string]: string;

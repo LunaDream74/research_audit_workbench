@@ -253,8 +253,12 @@
           "kind": {
             "enum": [
               "candidate_pool_mismatch",
-              "source_inconsistency",
-              "comparable_candidate_pool"
+              "evaluation_split_mismatch",
+              "preprocessing_mismatch",
+              "metric_definition_mismatch",
+              "missing_evidence",
+              "matched_condition",
+              "source_conflict"
             ],
             "title": "Kind",
             "type": "string"
@@ -489,6 +493,39 @@
               }
             ],
             "title": "Recorded Candidate Count"
+          },
+          "recorded_evaluation_split": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recorded Evaluation Split"
+          },
+          "recorded_metric_definition": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recorded Metric Definition"
+          },
+          "recorded_preprocessing": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recorded Preprocessing"
           },
           "source_hashes": {
             "additionalProperties": {
